@@ -13,7 +13,7 @@ class TransferFunction():
         self.num_coef = self.num_coef.reshape([len(self.num_coef), 1])
         self.den_coef = self.den_coef.reshape([len(self.den_coef), 1])
     
-    def define(self):
+    def init(self):
         '''
         Returns
         -------
@@ -29,9 +29,6 @@ class TransferFunction():
         Displays TF block
 
         '''
-        tf = self.define()
-        self.num_coef = tf["num"]
-        self.den_coef = tf["den"]
         
         self.num_str = ""
         for n in range(len(self.num_coef)):
