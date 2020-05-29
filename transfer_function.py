@@ -5,81 +5,70 @@ Created on Thu May 28 19:31:48 2020
 @author: Rushad
 """
 
-def transfer_function(num_coef, den_coef, disp=False):
-    '''
-    Parameters
-    ----------
-    num_coef : TYPE : Numpy Array 
-        DESCRIPTION: Numpy array of coefficients of the numerator of transfer function
-    den_coef : TYPE: Numpy Array
-        DESCRIPTION: Numpy array of coefficients of the denominator of transfer function
-    disp : TYPE, optional
-        DESCRIPTION. The default is False.
-
-    Returns
-    -------
-    tf : TYPE: dict
-        DESCRIPTION: dictionary consisting of TF data
-    '''
-    num_coef = num_coef.reshape([len(num_coef), 1])
-    den_coef = den_coef.reshape([len(den_coef), 1])
+class TransferFunction():
     
-    tf = {"num":num_coef, "den":den_coef}
+    def __init__(self, num_coef, den_coef):
+        self.num_coef = num_coef
+        self.den_coef = den_coef
+        self.num_coef = self.num_coef.reshape([len(self.num_coef), 1])
+        self.den_coef = self.den_coef.reshape([len(self.den_coef), 1])
     
-    if disp == True:
-        num_str = ""
-        for n in range(len(num_coef)):
+    def define(self):
+        '''
+        Returns
+        -------
+        tf : dictionary
+            contains TF data
             
-            if n < len(num_coef)-1:
-                if num_coef[n] > 1:
-                    #print("S^" + str(int(num_coef[n])) + " + ")
-                    num_str = num_str + "S^" + str(int(num_coef[n])) + " + "
-                elif num_coef[n] == 1:
-                    #print("S + ")
-                    num_str = num_str + "S + "
-                elif num_coef[n] == 0:
-                    #print("1 + ")
-                    num_str = num_str + "1 + "
-            else:
-                if num_coef[n] > 1:
-                    #print("S^" + str(int(num_coef[n])))
-                    num_str = num_str + "S^" + str(int(num_coef[n]))
-                elif num_coef[n] == 1:
-                    #print("S")
-                    num_str = num_str + "S"
-                elif num_coef[n] == 0:
-                    #print("1")
-                    num_str = num_str + "1"
-              
-        den_str = ""
-        for d in range(len(den_coef)):
-            
-            if d < len(den_coef)-1:
-                if den_coef[d] > 1:
-                    #print("S^" + str(int(den_coef[d])) + " + ")
-                    den_str = den_str + "S^" + str(int(den_coef[d])) + " + "
-                elif den_coef[d] == 1:
-                    #print("S + ")
-                    den_str = den_str + "S + "
-                elif den_coef[d] == 0:
-                    #print("1 + ")
-                    den_str = den_str + "1 + "
-            else:
-                if den_coef[d] > 1:
-                    #print("S^" + str(int(den_coef[d])))
-                    den_str = den_str + "S^" + str(int(den_coef[d]))
-                elif den_coef[d] == 1:
-                    #print("S")
-                    den_str = den_str + "S"
-                elif den_coef[d] == 0:
-                    #print("1")
-                    den_str = den_str + "1"
-    
-    div_line_len = max(len(num_str), len(den_str))
-    div_line = div_line_len*"-"
-    tf_disp = str(num_str + " \n" + div_line + " \n" + den_str)
-    if disp == True:
-        return tf, tf_disp
-    else:
+        '''
+        tf = {"num":self.num_coef, "den":self.den_coef}
         return tf
+
+    def display(self):
+        '''
+        Displays TF block
+
+        '''
+        tf = self.define()
+        self.num_coef = tf["num"]
+        self.den_coef = tf["den"]
+        
+        self.num_str = ""
+        for n in range(len(self.num_coef)):
+            if n < len(self.num_coef)-1:
+                if self.num_coef[n] > 1:
+                    self.num_str = self.num_str + "S^" + str(int(self.num_coef[n])) + " + "
+                elif self.num_coef[n] == 1:
+                    self.num_str = self.num_str + "S + "
+                elif self.num_coef[n] == 0:
+                    self.num_str = self.num_str + "1 + "
+            else:
+                if self.num_coef[n] > 1:
+                    self.num_str = self.num_str + "S^" + str(int(self.num_coef[n]))
+                elif self.num_coef[n] == 1:
+                    self.num_str = self.num_str + "S"
+                elif self.num_coef[n] == 0:
+                    self.num_str = self.num_str + "1"
+                  
+        self.den_str = ""
+        for d in range(len(self.den_coef)):
+            if d < len(self.den_coef)-1:
+                if self.den_coef[d] > 1:
+                    self.den_str = self.den_str + "S^" + str(int(self.den_coef[d])) + " + "
+                elif self.den_coef[d] == 1:
+                    self.den_str = self.den_str + "S + "
+                elif self.den_coef[d] == 0:
+                    self.den_str = self.den_str + "1 + "
+            else:
+                if self.den_coef[d] > 1:
+                    self.den_str = self.den_str + "S^" + str(int(self.den_coef[d]))
+                elif self.den_coef[d] == 1:
+                    self.den_str = self.den_str + "S"
+                elif self.den_coef[d] == 0:
+                    self.den_str = self.den_str + "1"
+        
+        self.div_line_len = max(len(self.num_str), len(self.den_str))
+        self.div_line = self.div_line_len*"-"
+        tf_disp = str(self.num_str + " \n" + self.div_line + " \n" + self.den_str)
+        print(tf_disp)
 
