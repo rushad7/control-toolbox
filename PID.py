@@ -28,10 +28,9 @@ class PID():
         Displays the PID TF block
 
         '''
-        pid_tf = self.init()
         
         self.num_str = str(self.K_d) + " *S^2 + " + str(self.K_p) + " *S + " + str(self.K_i) 
-        self.den_str = "S"
+        self.den_str = round(len(self.num_str)/2)*" " + "S" + " "*round(len(self.num_str)/2)
         
         self.div_line_len = max(len(self.num_str), len(self.den_str))
         self.div_line = self.div_line_len*"-"
