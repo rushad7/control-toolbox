@@ -5,6 +5,9 @@ Created on Thu May 28 19:31:48 2020
 @author: Rushad
 """
 
+import numpy as np
+import matplotlib.pyplot as plt
+
 class TransferFunction():
     
     def __init__(self, num_coef, den_coef):
@@ -81,4 +84,31 @@ class TransferFunction():
         self.div_line = self.div_line_len*"-"
         tf_disp = str(self.num_str + " \n" + self.div_line + " \n" + self.den_str)
         print(tf_disp)
-
+        
+    def response(self, input_type, time_period=3, sample_time=0.2, ret=False):
+        self.input_type = input_type
+        self.time_period = time_period
+        self.sample_time = sample_time
+        self.controller_time = np.array([i for i in np.arange(0, self.time_period, self.sample_time)])
+        self.input_resp = {"impulse":"impulse_order1(self)", "step":"step_order1(self)", "ramp":"ramp_order1(self)"}
+        self.order = len(self.den_coef) - 1
+        
+        def impulse_order1(self):
+            resp = (float(self.num_coef[0])/float(self.den_coef[0]))*np.exp(-self.controller_time/float(self.den_coef[0]))
+            return resp
+            
+        def step_order1(self):
+            resp = float(self.num_coef[0])*(1 - np.exp(-self.controller_time/float(self.den_coef[0])))
+            return resp
+            
+        def ramp_order1(self):
+            resp = float(self.num_coef[0])*(float(-self.den_coef[0]) + self.controller_time + np.exp(-self.controller_time/float(self.den_coef[0])))
+            return resp
+        
+        resp = eval(self.input_resp[self.input_type])
+        
+        plt.plot(self.controller_time, resp)
+        plt.show()
+                          
+        if ret == True:
+            return resp
