@@ -9,13 +9,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class TransferFunction():
-    
+    '''
+    Define the Transfer Functions in standard form only for correct results
+    Currently supports first and second order systems
+    '''
     def __init__(self, num_coef, den_coef):
         self.num_coef = num_coef
         self.den_coef = den_coef
         self.num_coef = self.num_coef.reshape([len(self.num_coef), 1])
         self.den_coef = self.den_coef.reshape([len(self.den_coef), 1])
-    
+        if (max(len(self.num_coef), len(self.den_coef)) > 2):
+            print("[WARNING] You have inputed a system of Order:" + str(max(len(self.num_coef), len(self.den_coef))) + "\n" + "Current support is for first and second order systems\n")
+            print("Continuing WILL NOT produce correct results")
     def init(self):
         '''
         Returns
@@ -91,7 +96,6 @@ class TransferFunction():
         self.sample_time = sample_time
         self.controller_time = np.array([i for i in np.arange(0, self.time_period, self.sample_time)])
         self.input_resp = {"impulse":"impulse_order1(self)", "step":"step_order1(self)", "ramp":"ramp_order1(self)"}
-        self.order = len(self.den_coef) - 1
         
         def impulse_order1(self):
             resp = (float(self.num_coef[0])/float(self.den_coef[0]))*np.exp(-self.controller_time/float(self.den_coef[0]))
