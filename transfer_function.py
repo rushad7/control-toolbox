@@ -110,9 +110,9 @@ class TransferFunction():
                 self.damping_ratio = self.den_coef[1]/(2*self.natural_frequency)
             
                 if float(self.damping_ratio) > 1: 
-                    resp = (self.natural_frequency/(np.sqrt(self.damping_ratio**2 - 1)))*np.exp(-self.damping_ratio*self.natural_frequency*self.controller_time)*np.sinh(self.natural_frequency*np.sqrt(self.damping_ratio**2 - 1))*self.controller_time
+                    resp = (self.natural_frequency/(np.sqrt(self.damping_ratio**2 - 1)))*np.exp(-self.damping_ratio*self.natural_frequency*self.controller_time)*np.sinh(self.natural_frequency*np.sqrt(self.damping_ratio**2 - 1)*self.controller_time)
                 elif float(self.damping_ratio) < 1:
-                    resp = (self.natural_frequency/(np.sqrt(1 - self.damping_ratio**2)))*np.exp(-self.damping_ratio*self.natural_frequency*self.controller_time)*np.sin(self.natural_frequency*np.sqrt(1- self.damping_ratio**2))*self.controller_time                
+                    resp = (self.natural_frequency/(np.sqrt(1 - self.damping_ratio**2)))*np.exp(-self.damping_ratio*self.natural_frequency*self.controller_time)*np.sin(self.natural_frequency*np.sqrt(1- self.damping_ratio**2)*self.controller_time)                
                 elif float(self.damping_ratio) == 1:
                     resp = (self.natural_frequency**2)*self.controller_time*(np.exp(-self.natural_frequency*self.controller_time))
                 elif float(self.damping_ratio) == 0:
