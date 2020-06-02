@@ -154,7 +154,7 @@ class TransferFunction():
                 
                 self.natural_frequency = float(np.sqrt(self.den_coef[2]))
                 self.damping_ratio = float(self.den_coef[1]/(2*self.natural_frequency))
-                self.phase_angle = float(np.arctan(self.damping_ratio/np.sqrt(1 - self.damping_ratio**2)))
+                self.phase_angle = float(np.arctan(np.sqrt(1 - self.damping_ratio**2)/self.damping_ratio))
                 
                 if float(self.damping_ratio == 1):
                     resp = 1 - (1 + (self.natural_frequency*self.controller_time))*np.exp(-self.damping_ratio*self.natural_frequency*self.controller_time)
@@ -206,3 +206,32 @@ class TransferFunction():
                           
         if ret == True:
             return resp
+        
+    def parameters(self, settling_time_criterion=0.05):
+        
+        self.order = max(len(self.num_coef), len(self.den_coef)) - 1
+        
+        if self.order == 1:
+            self.gain = float(self.num_coef[0])
+            self.time_constant = float(self.den_coef[0])
+            parameter = {"Order":self.order, "Gain":self.gain, "Time Constant":self.time_constant}
+            return parameter
+            
+        if self.order == 2:
+            self.natural_frequency = float(np.sqrt(self.den_coef[2]))
+            self.damped_freq = self.natural_frequency*np.sqrt(1 - self.damping_ratio**2)
+            self.damping_ratio = float(self.den_coef[1]/(2*self.natural_frequency))
+            self.phase_angle = float(np.arctan(self.damping_ratio/np.sqrt(np.abs(1 - self.damping_ratio**2))))            
+            self.rise_time = float((np.pi - self.phase_angle)/(self.natural_frequency*np.sqrt(1 - self.damping_ratio**2)))
+            self.peak_time = float(np.pi/(self.natural_frequency*np.sqrt(1 - self.damping_ratio**2)))
+            self.max_overshoot = float(np.exp((-self.damping_ratio*np.pi)/(np.sqrt(1 - self.damping_ratio**2)))*100)
+            self.settling_time_criterion = settling_time_criterion
+            self.settling_time = float(-np.log((self.settling_time_criterion*np.sqrt(1 - self.damping_ratio**2))/(self.damping_ratio*self.natural_frequency)))
+           
+            parameter = {"Order":self.order, "Natural Frequency":self.natural_frequency, "Damping Frequency":self.damped_freq, "Damping Ratio":self.damping_ratio, "Phase Angle":self.phase_angle, "Rise Time":self.rise_time, "Peak Time":self.peak_time, "Max Overshoot":self.max_overshoot, "Settling Time":self.settling_time}
+            return parameter
+        
+        
+        
+        
+        
