@@ -14,8 +14,21 @@ class TransferFunction():
     Currently supports first and second order systems
     '''
     def __init__(self, num_coef, den_coef):
-        self.num_coef = num_coef
-        self.den_coef = den_coef
+        '''
+        Parameters
+        ----------
+        num_coef : numpy array OR list
+            DESCRIPTION. Coefficient of Transfer Function's Numerator
+        den_coef : TYPE numpy array OR list
+            DESCRIPTION. Coefficient of Transfer Function's Denominator
+
+        Returns
+        -------
+        None.
+
+        '''
+        self.num_coef = np.array(num_coef)
+        self.den_coef = np.array(den_coef)
         self.num_coef = self.num_coef.reshape([len(self.num_coef), 1])
         self.den_coef = self.den_coef.reshape([len(self.den_coef), 1])
         if (max(len(self.num_coef), len(self.den_coef))-1 > 2):
@@ -79,10 +92,21 @@ class TransferFunction():
         tf_disp = str(self.num_str + " \n" + self.div_line + " \n" + self.den_str)
         print(tf_disp)
         
-    def parameters(self, settling_time_criterion=0.05):
-        
+    def parameters(self, settling_time_tolerance=0.05):
+        '''
+        Parameters
+        ----------
+        settling_time_tolerance : float, optional
+            DESCRIPTION. Tolerance limit for error in settling time. The default is 0.05 (5%)
+
+        Returns
+        -------
+        parameter : dictionary
+            DESCRIPTION. Dictionary containing all the parameters/time domain specifications
+
+        '''
         self.order = max(len(self.num_coef), len(self.den_coef)) - 1
-        self.settling_time_criterion = settling_time_criterion
+        self.settling_time_tolerance = settling_time_tolerance
         
         if self.order == 1:
             self.gain = float(self.num_coef[0])
@@ -99,7 +123,7 @@ class TransferFunction():
             self.rise_time = float((np.pi - self.phase_angle)/(self.natural_frequency*np.sqrt(1 - self.damping_ratio**2)))
             self.peak_time = float(np.pi/(self.natural_frequency*np.sqrt(1 - self.damping_ratio**2)))
             self.max_overshoot = float(np.exp((-self.damping_ratio*np.pi)/(np.sqrt(1 - self.damping_ratio**2)))*100)
-            self.settling_time = float(-np.log((self.settling_time_criterion*np.sqrt(1 - self.damping_ratio**2))/(self.damping_ratio*self.natural_frequency)))
+            self.settling_time = float(-np.log((self.settling_time_tolerance*np.sqrt(1 - self.damping_ratio**2))/(self.damping_ratio*self.natural_frequency)))
            
             parameter = {"Order":self.order, "Gain":self.gain,"Natural Frequency":self.natural_frequency, "Damping Frequency":self.damped_freq, "Damping Ratio":self.damping_ratio, "Phase Angle":self.phase_angle, "Rise Time":self.rise_time, "Peak Time":self.peak_time, "Max Overshoot":self.max_overshoot, "Settling Time":self.settling_time}
             return parameter     
