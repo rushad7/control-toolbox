@@ -21,17 +21,6 @@ class TransferFunction():
         if (max(len(self.num_coef), len(self.den_coef))-1 > 2):
             print("[WARNING] You have inputed a system of Order:" + str(max(len(self.num_coef), len(self.den_coef))-1) + "\n" + "Current support is for first and second order systems\n Continuing WILL NOT produce correct results")
             
-    def init(self):
-        '''
-        Returns
-        -------
-        tf : dictionary
-            contains TF data
-            
-        '''
-        tf = {"num":self.num_coef, "den":self.den_coef}
-        return tf
-
     def display(self):
         '''
         Displays TF block
@@ -93,6 +82,7 @@ class TransferFunction():
     def parameters(self, settling_time_criterion=0.05):
         
         self.order = max(len(self.num_coef), len(self.den_coef)) - 1
+        self.settling_time_criterion = settling_time_criterion
         
         if self.order == 1:
             self.gain = float(self.num_coef[0])
@@ -101,6 +91,7 @@ class TransferFunction():
             return parameter
             
         if self.order == 2:
+            self.gain = float(self.num_coef[0]/self.den_coef[2])
             self.natural_frequency = float(np.sqrt(self.den_coef[2]))
             self.damping_ratio = float(self.den_coef[1]/(2*self.natural_frequency))
             self.damped_freq = self.natural_frequency*np.sqrt(1 - self.damping_ratio**2)
@@ -108,10 +99,9 @@ class TransferFunction():
             self.rise_time = float((np.pi - self.phase_angle)/(self.natural_frequency*np.sqrt(1 - self.damping_ratio**2)))
             self.peak_time = float(np.pi/(self.natural_frequency*np.sqrt(1 - self.damping_ratio**2)))
             self.max_overshoot = float(np.exp((-self.damping_ratio*np.pi)/(np.sqrt(1 - self.damping_ratio**2)))*100)
-            self.settling_time_criterion = settling_time_criterion
             self.settling_time = float(-np.log((self.settling_time_criterion*np.sqrt(1 - self.damping_ratio**2))/(self.damping_ratio*self.natural_frequency)))
            
-            parameter = {"Order":self.order, "Natural Frequency":self.natural_frequency, "Damping Frequency":self.damped_freq, "Damping Ratio":self.damping_ratio, "Phase Angle":self.phase_angle, "Rise Time":self.rise_time, "Peak Time":self.peak_time, "Max Overshoot":self.max_overshoot, "Settling Time":self.settling_time}
+            parameter = {"Order":self.order, "Gain":self.gain,"Natural Frequency":self.natural_frequency, "Damping Frequency":self.damped_freq, "Damping Ratio":self.damping_ratio, "Phase Angle":self.phase_angle, "Rise Time":self.rise_time, "Peak Time":self.peak_time, "Max Overshoot":self.max_overshoot, "Settling Time":self.settling_time}
             return parameter     
            
     def response(self, input_type, time_period=5, sample_time=0.2, ret=False):
@@ -150,7 +140,7 @@ class TransferFunction():
                 
                 self.natural_frequency = float(np.sqrt(self.den_coef[2]))
                 self.damping_ratio = float(self.den_coef[1]/(2*self.natural_frequency))
-            
+                
                 if float(self.damping_ratio) > 1: 
                     resp = (self.natural_frequency/(np.sqrt(self.damping_ratio**2 - 1)))*np.exp(-self.damping_ratio*self.natural_frequency*self.controller_time)*np.sinh(self.natural_frequency*np.sqrt(self.damping_ratio**2 - 1)*self.controller_time)
                 elif float(self.damping_ratio) < 1:
@@ -164,7 +154,7 @@ class TransferFunction():
             if self.order == 1:
                 resp = impulse_order1(self)
             elif self.order == 2:
-                resp = impulse_order2(self)
+                resp = (float(self.num_coef[0]/self.den_coef[2]))*impulse_order2(self)
                 
             return resp
         
@@ -180,6 +170,7 @@ class TransferFunction():
                 self.damping_ratio = float(self.den_coef[1]/(2*self.natural_frequency))
                 self.phase_angle = float(np.arctan(np.sqrt(1 - self.damping_ratio**2)/self.damping_ratio))
                 
+                
                 if float(self.damping_ratio == 1):
                     resp = 1 - (1 + (self.natural_frequency*self.controller_time))*np.exp(-self.damping_ratio*self.natural_frequency*self.controller_time)
                 elif float(self.damping_ratio < 1):
@@ -193,7 +184,7 @@ class TransferFunction():
             if self.order == 1:
                 resp = step_order1(self)
             elif self.order == 2:
-                resp = step_order2(self)
+                resp = (float(self.num_coef[0]/self.den_coef[2]))*step_order2(self)
                 
             return resp
         
@@ -219,7 +210,7 @@ class TransferFunction():
             if self.order == 1:
                 resp = ramp_order1(self)
             elif self.order == 2:
-                resp = ramp_order2(self)
+                resp = float(self.num_coef[0]/self.den_coef[2])*ramp_order2(self)
                 
             return resp
             
