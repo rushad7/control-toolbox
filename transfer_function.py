@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 class TransferFunction():
     '''
-    Define the Transfer Functions in standard form only for correct results
+    Define the Transfer Functions in standard form only.
     Currently supports first and second order systems
     '''
     def __init__(self, num_coef, den_coef):
@@ -92,7 +92,7 @@ class TransferFunction():
         tf_disp = str(self.num_str + " \n" + self.div_line + " \n" + self.den_str)
         print(tf_disp)
         
-    def time_domain_spec(self, settling_time_tolerance=0.05):
+    def parameters(self, settling_time_tolerance=0.05):
         '''
         Parameters
         ----------
@@ -246,67 +246,28 @@ class TransferFunction():
         if ret == True:
             return resp
 
-    def error(self, input_type, system_type):
-        self.input_type = input_type
-        self.system_type = system_type
-        self.system_types = {"0":"type0(self)", "1":"type1(self)", "2":"type2(self)"}
-        #self.input_resp = {"step":"step(self)", "ramp":"ramp(self)", "parabolic":"parabolic(self)"}
+    
+class feedback(TransferFunction):
+    
+    def __init__(self, transfer_function1, transfer_function2):
         
-        def type0(self):
-            def step(self):    
-                self.position_error = self.num_coef[0]/self.den_coef[-1]
-                self.error0 = 1/(1+self.position_error)
-                return self.error0
-            def ramp(self):
-                self.error0 = np.inf
-                return self.error0
-            def parabolic(self):
-                self.error0 = np.inf
-                return self.error0
-            
-            self.error_step = self.step()
-            self.error_ramp = self.ramp()
-            self.error_parabolic = self.parabolic()
-            self.error_total = {"Type":self.system_type, "Position Error":self.error_step, "Velocity Error":self.error_ramp, "Acceleration Error":self.error_parabolic}
-            
-            return self.error_total
-            
-        def type1(self):
-            def step(self):    
-                self.error1 = 0
-                return self.error1
-            def ramp(self):
-                #self.velocity_error = 
-                self.error1 = np.inf
-                return self.error
-            def parabolic(self):
-                self.error1 = np.inf
-                return self.error1
-            
-            self.error_step = self.step()
-            self.error_ramp = self.ramp()
-            self.error_parabolic = self.parabolic()
-            self.error_total = {"Type":self.system_type, "Position Error":self.error_step, "Velocity Error":self.error_ramp, "Acceleration Error":self.error_parabolic}
-            
-            return self.error_total
-            
-        def type2(self):
-            def step(self):    
-                self.error2 = 0
-                return self.error2
-            def ramp(self):
-                self.error2 = np.inf
-                return self.error2
-            def parabolic(self):
-                #self.velocity_error =
-                self.error2 = np.inf
-                return self.error2
-            
-            self.error_step = step(self)
-            self.error_ramp = ramp(self)
-            self.error_parabolic = parabolic(self)
-            self.error_total = {"Type":self.system_type, "Position Error":self.error_step, "Velocity Error":self.error_ramp, "Acceleration Error":self.error_parabolic}
-            
-            return self.error_total
+        self.transfer_function1 = transfer_function1
+        self.transfer_function2 = transfer_function2
         
-        eval(self.system_types[self.system_type])
+        self.num1 = self.transfer_function1.num_coef
+        self.den1 = self.transfer_function1.den_coef
+        
+        self.num2 = self.transfer_function2.num_coef
+        self.den2 = self.transfer_function2.den_coef
+
+        self.feedback_den0 =  float(self.den1[0])
+        self.feedback_den1 =  float(self.den1[1])
+        self.feedback_den2 =  float(self.num1[-1] + self.den1[2])
+        
+        self.feedback_num = self.num1
+        self.feedback_den = np.array([self.feedback_den0, self.feedback_den1, self.feedback_den2])
+        
+        self.num_coef = self.feedback_num.reshape([len(self.feedback_num), 1])
+        self.den_coef = self.feedback_den.reshape([len(self.feedback_den), 1])
+        
+        self.feedback_tf = TransferFunction(self.num_coef, self.den_coef)
