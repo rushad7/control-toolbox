@@ -248,9 +248,23 @@ class TransferFunction():
 
     
 class feedback(TransferFunction):
-    
+    '''
+    Add feedback TF to open loop TF. Define i standard form only.
+    '''
     def __init__(self, transfer_function1, transfer_function2):
-        
+        '''
+        Parameters
+        ----------
+        transfer_function1 : TransferFunction object
+            DESCRIPTION. TF of the plant on which feedback is needed 
+        transfer_function2 : TransferFunction object
+            DESCRIPTION. TF of feedback block
+
+        Returns
+        -------
+        None.
+
+        '''
         self.transfer_function1 = transfer_function1
         self.transfer_function2 = transfer_function2
         
