@@ -31,6 +31,8 @@ class TransferFunction():
         self.den_coef = np.array(den_coef)
         self.num_coef = self.num_coef.reshape([len(self.num_coef), 1])
         self.den_coef = self.den_coef.reshape([len(self.den_coef), 1])
+        self.order = max(len(self.num_coef), len(self.den_coef)) - 1
+        
         if (max(len(self.num_coef), len(self.den_coef))-1 > 2):
             print("[WARNING] You have inputed a system of Order:" + str(max(len(self.num_coef), len(self.den_coef))-1) + "\n" + "Current support is for first and second order systems\n Continuing WILL NOT produce correct results")
             
@@ -40,56 +42,56 @@ class TransferFunction():
         
         '''
         
-        self.num_str = ""
+        num_str = ""
         for n in range(len(self.num_coef)):
             if n < len(self.num_coef)-1: #if not last
                 if n != len(self.num_coef)-2: #if not second last
                     if self.num_coef[n] != 1 and self.num_coef[n] != 0: #if coef is not zero and one
-                        self.num_str = self.num_str + str(int(self.num_coef[n])) + "*S^" + str(abs(n-len(self.num_coef)+1)) + " + "
+                        num_str = num_str + str(int(self.num_coef[n])) + "*S^" + str(abs(n-len(self.num_coef)+1)) + " + "
                     elif self.num_coef[n] == 1: #if coef is one
-                        self.num_str = self.num_str + "S^" + str(abs(n-len(self.num_coef)+1)) + " + "
+                        num_str = num_str + "S^" + str(abs(n-len(self.num_coef)+1)) + " + "
                     elif self.num_coef[n] == 0: #if coef is zero
                         pass
                 else: #if second last
                     if self.num_coef[n] != 1 and self.num_coef[n] != 0: #if coef is not zero and one
-                        self.num_str = self.num_str + str(int(self.num_coef[n])) + "*S" + " + "
+                        num_str = num_str + str(int(self.num_coef[n])) + "*S" + " + "
                     elif self.num_coef[n] == 1: #if coef is one
-                        self.num_str = self.num_str  + "S" + " + "
+                        num_str = num_str  + "S" + " + "
                     elif self.num_coef[n] == 0: #if coef is zero
                         pass
                         
             else: #if last
                 if self.num_coef[n] != 0: #if coef is not zero
-                    self.num_str = self.num_str + str(int(self.num_coef[n]))
+                    num_str = num_str + str(int(self.num_coef[n]))
                 elif self.num_coef[n] == 0: #if coef is zero
-                    self.num_str = self.num_str[:-3]
+                    num_str = num_str[:-3]
                   
-        self.den_str = ""
+        den_str = ""
         for d in range(len(self.den_coef)):
             if d < len(self.den_coef)-1: #if not last 
                 if d != len(self.den_coef)-2: #if not second last
                     if self.den_coef[d] != 1 and self.den_coef[d] != 0: #if coef not zero and one
-                        self.den_str = self.den_str + str(int(self.den_coef[d])) + "*S^" + str(abs(d-len(self.den_coef)+1)) + " + "
+                        den_str = den_str + str(int(self.den_coef[d])) + "*S^" + str(abs(d-len(self.den_coef)+1)) + " + "
                     elif self.den_coef[d] == 1: #if coef is one
-                        self.den_str = self.den_str + "S^" + str(abs(d-len(self.den_coef)+1)) + " + "
-                    elif self.den_coef[d] == 0: #if coef is zer0
+                        den_str = den_str + "S^" + str(abs(d-len(self.den_coef)+1)) + " + "
+                    elif self.den_coef[d] == 0: #if coef is zero
                         pass
                 else: #if second last
                     if self.den_coef[d] != 1 and self.den_coef[d] != 0: #if coef is not zero and one
-                        self.den_str = self.den_str + str(int(self.den_coef[d])) + "*S" + " + "
+                        den_str = den_str + str(int(self.den_coef[d])) + "*S" + " + "
                     elif self.den_coef[d] == 1: #if coef is one
-                        self.den_str = self.den_str  + "S" + " + "
+                        den_str = den_str  + "S" + " + "
                     elif self.den_coef[d] == 0: #if coef is zero
                         pass
             else: #if last
                 if self.den_coef[d] != 0: #if coef is not zero
-                    self.den_str = self.den_str + str(int(self.den_coef[d]))
+                    den_str = den_str + str(int(self.den_coef[d]))
                 elif self.den_coef[d] == 0: #if coef is zero
-                    self.den_str = self.den_str[:-3]
+                    den_str = den_str[:-3]
         
-        self.div_line_len = max(len(self.num_str), len(self.den_str))
-        self.div_line = self.div_line_len*"-"
-        tf_disp = str(self.num_str + " \n" + self.div_line + " \n" + self.den_str)
+        div_line_len = max(len(num_str), len(den_str))
+        div_line = div_line_len*"-"
+        tf_disp = str(num_str + " \n" + div_line + " \n" + den_str)
         print(tf_disp)
         
     def parameters(self, settling_time_tolerance=0.05):
@@ -147,32 +149,29 @@ class TransferFunction():
             DESCRIPTION. numpy array of response of the system. Is only returned if ret is set to True
 
         '''
-        self.input_type = input_type
-        self.time_period = time_period
-        self.sample_time = sample_time
-        self.controller_time = np.array([i for i in np.arange(0, self.time_period, self.sample_time)])
-        self.input_resp = {"impulse":"impulse(self)", "step":"step(self)", "ramp":"ramp(self)"}
-        self.order = max(len(self.num_coef), len(self.den_coef)) - 1
+        
+        controller_time = np.array([i for i in np.arange(0, time_period, sample_time)])
+        input_resp = {"impulse":"impulse(self)", "step":"step(self)", "ramp":"ramp(self)"}
         
         def impulse(self):
             
             def impulse_order1(self):
-                resp = (float(self.num_coef[0])/float(self.den_coef[0]))*np.exp(-self.controller_time/float(self.den_coef[0]))
+                resp = (float(self.num_coef[0])/float(self.den_coef[0]))*np.exp(-controller_time/float(self.den_coef[0]))
                 return resp
             
             def impulse_order2(self):
                 
-                self.natural_frequency = float(np.sqrt(self.den_coef[2]))
-                self.damping_ratio = float(self.den_coef[1]/(2*self.natural_frequency))
+                natural_frequency = float(np.sqrt(self.den_coef[2]))
+                damping_ratio = float(self.den_coef[1]/(2*natural_frequency))
                 
-                if float(self.damping_ratio) > 1: 
-                    resp = (self.natural_frequency/(np.sqrt(self.damping_ratio**2 - 1)))*np.exp(-self.damping_ratio*self.natural_frequency*self.controller_time)*np.sinh(self.natural_frequency*np.sqrt(self.damping_ratio**2 - 1)*self.controller_time)
-                elif float(self.damping_ratio) < 1:
-                    resp = (self.natural_frequency/(np.sqrt(1 - self.damping_ratio**2)))*np.exp(-self.damping_ratio*self.natural_frequency*self.controller_time)*np.sin(self.natural_frequency*np.sqrt(1- self.damping_ratio**2)*self.controller_time)                
-                elif float(self.damping_ratio) == 1:
-                    resp = (self.natural_frequency**2)*self.controller_time*(np.exp(-self.natural_frequency*self.controller_time))
-                elif float(self.damping_ratio) == 0:
-                    resp = self.natural_frequency*np.sin(self.natural_frequency*self.controller_time)
+                if float(damping_ratio) > 1: 
+                    resp = (natural_frequency/(np.sqrt(damping_ratio**2 - 1)))*np.exp(-damping_ratio*natural_frequency*controller_time)*np.sinh(natural_frequency*np.sqrt(damping_ratio**2 - 1)*controller_time)
+                elif float(damping_ratio) < 1:
+                    resp = (natural_frequency/(np.sqrt(1 - damping_ratio**2)))*np.exp(-damping_ratio*natural_frequency*controller_time)*np.sin(natural_frequency*np.sqrt(1- damping_ratio**2)*controller_time)                
+                elif float(damping_ratio) == 1:
+                    resp = (natural_frequency**2)*controller_time*(np.exp(-natural_frequency*controller_time))
+                elif float(damping_ratio) == 0:
+                    resp = natural_frequency*np.sin(natural_frequency*controller_time)
                 return resp
         
             if self.order == 1:
@@ -185,24 +184,25 @@ class TransferFunction():
         def step(self):
             
             def step_order1(self):
-                resp = float(self.num_coef[0])*(1 - np.exp(-self.controller_time/float(self.den_coef[0])))
+                resp = float(self.num_coef[0])*(1 - np.exp(-controller_time/float(self.den_coef[0])))
                 return resp
             
             def step_order2(self):
                 
-                self.natural_frequency = float(np.sqrt(self.den_coef[2]))
-                self.damping_ratio = float(self.den_coef[1]/(2*self.natural_frequency))
-                self.phase_angle = float(np.arctan(np.sqrt(1 - self.damping_ratio**2)/self.damping_ratio))
+                natural_frequency = float(np.sqrt(self.den_coef[2]))
+                damping_ratio = float(self.den_coef[1]/(2*natural_frequency))
+                phase_angle = float(np.arctan(np.sqrt(1 - damping_ratio**2)/damping_ratio))
                 
                 
-                if float(self.damping_ratio == 1):
-                    resp = 1 - (1 + (self.natural_frequency*self.controller_time))*np.exp(-self.damping_ratio*self.natural_frequency*self.controller_time)
-                elif float(self.damping_ratio < 1):
-                    resp = 1 - ((np.exp(-self.damping_ratio*self.natural_frequency*self.controller_time)/np.sqrt(1 - self.damping_ratio**2))*np.sin(self.natural_frequency*np.sqrt(1 - self.damping_ratio**2)*self.controller_time + self.phase_angle))
-                elif float(self.damping_ratio > 1):
-                    resp = 1 - (np.exp(-self.damping_ratio*self.natural_frequency*self.controller_time)/(2*np.sqrt(self.damping_ratio**2 - 1)))*((np.exp(self.natural_frequency*np.sqrt(self.damping_ratio**2 - 1)*self.controller_time)/(self.damping_ratio - np.sqrt(self.damping_ratio**2 - 1))) + (np.exp(-self.natural_frequency*np.sqrt(self.damping_ratio**2 - 1)*self.controller_time)/(self.damping_ratio + np.sqrt(self.damping_ratio**2 - 1))))
-                elif float(self.damping_ratio == 0):
-                    resp = 1 - (np.e*np.sin(self.natural_frequency*self.controller_time + 1.5707963267948966))        
+                if float(damping_ratio == 1):
+                    resp = 1 - (1 + (natural_frequency*controller_time))*np.exp(-damping_ratio*natural_frequency*controller_time)
+                elif float(damping_ratio < 1):
+                    resp = 1 - ((np.exp(-damping_ratio*natural_frequency*controller_time)/np.sqrt(1 - damping_ratio**2))*np.sin(natural_frequency*np.sqrt(1 - damping_ratio**2)*controller_time + phase_angle))
+                elif float(damping_ratio > 1):
+                    resp = 1 - (np.exp(-damping_ratio*natural_frequency*controller_time)/(2*np.sqrt(damping_ratio**2 - 1)))*((np.exp(natural_frequency*np.sqrt(damping_ratio**2 - 1)*controller_time)/(damping_ratio - np.sqrt(damping_ratio**2 - 1))) + (np.exp(-natural_frequency*np.sqrt(damping_ratio**2 - 1)*controller_time)/(damping_ratio + np.sqrt(damping_ratio**2 - 1))))
+                elif float(damping_ratio == 0):
+                    resp = 1 - (np.e*np.sin(natural_frequency*controller_time + 1.5707963267948966))        
+                
                 return resp
             
             if self.order == 1:
@@ -215,20 +215,21 @@ class TransferFunction():
         def ramp(self):
             
             def ramp_order1(self):
-                resp = float(self.num_coef[0])*(float(-self.den_coef[0]) + self.controller_time + np.exp(-self.controller_time/float(self.den_coef[0])))
+                resp = float(self.num_coef[0])*(float(-self.den_coef[0]) + controller_time + np.exp(-controller_time/float(self.den_coef[0])))
                 return resp
         
             def ramp_order2(self):
                 
-                self.natural_frequency = float(np.sqrt(self.den_coef[2]))
-                self.damping_ratio = float(self.den_coef[1]/(2*self.natural_frequency))
+                natural_frequency = float(np.sqrt(self.den_coef[2]))
+                damping_ratio = float(self.den_coef[1]/(2*natural_frequency))
                 
-                if 0 <= float(self.damping_ratio) < 1:
-                    resp = (1/self.natural_frequency**2)*((self.controller_time + (np.exp(-self.damping_ratio*self.natural_frequency*self.controller_time)/self.natural_frequency)*((2*self.damping_ratio*np.cos(self.natural_frequency*np.sqrt(1 - self.damping_ratio**2)*self.controller_time)) + (((2*self.damping_ratio**2 -1)/np.sqrt(1 - self.damping_ratio**2))*np.sin(self.natural_frequency*np.sqrt(1 - self.damping_ratio**2)*self.controller_time))) - (2*self.damping_ratio/self.natural_frequency)))
-                elif float(self.damping_ratio) == 1:
-                    resp = (1/self.natural_frequency**2)*(self.controller_time + ((2*np.exp(-self.natural_frequency*self.controller_time))/self.natural_frequency) + (self.controller_time*np.exp(-self.natural_frequency*self.controller_time)) - (2/self.natural_frequency))
-                elif float(self.damping_ratio) > 1:
-                    resp = (1/self.damping_ratio**2)*(self.controller_time + (self.natural_frequency/(2*np.sqrt(np.abs(1 - self.damping_ratio**2))))*((((1/((self.damping_ratio*self.natural_frequency) - np.sqrt(np.abs(1 - self.damping_ratio**2))*self.natural_frequency))**2)*np.exp(-self.controller_time/(1/((self.damping_ratio*self.natural_frequency) - np.sqrt(np.abs(1 - self.damping_ratio**2))*self.natural_frequency)))) - (((1/((self.damping_ratio*self.natural_frequency) + np.sqrt(np.abs(1 - self.damping_ratio**2))*self.natural_frequency))**2)*(np.exp(-self.controller_time/(1/((self.damping_ratio*self.natural_frequency) + np.sqrt(np.abs(1 - self.damping_ratio**2))*self.natural_frequency)))))) - (2*self.damping_ratio/self.natural_frequency))
+                if 0 <= float(damping_ratio) < 1:
+                    resp = (1/natural_frequency**2)*((controller_time + (np.exp(-damping_ratio*natural_frequency*controller_time)/natural_frequency)*((2*damping_ratio*np.cos(natural_frequency*np.sqrt(1 - damping_ratio**2)*controller_time)) + (((2*damping_ratio**2 -1)/np.sqrt(1 - damping_ratio**2))*np.sin(natural_frequency*np.sqrt(1 - damping_ratio**2)*controller_time))) - (2*damping_ratio/natural_frequency)))
+                elif float(damping_ratio) == 1:
+                    resp = (1/natural_frequency**2)*(controller_time + ((2*np.exp(-natural_frequency*controller_time))/natural_frequency) + (controller_time*np.exp(-natural_frequency*controller_time)) - (2/natural_frequency))
+                elif float(damping_ratio) > 1:
+                    resp = (1/damping_ratio**2)*(controller_time + (natural_frequency/(2*np.sqrt(np.abs(1 - damping_ratio**2))))*((((1/((damping_ratio*natural_frequency) - np.sqrt(np.abs(1 - damping_ratio**2))*natural_frequency))**2)*np.exp(-controller_time/(1/((damping_ratio*natural_frequency) - np.sqrt(np.abs(1 - damping_ratio**2))*natural_frequency)))) - (((1/((damping_ratio*natural_frequency) + np.sqrt(np.abs(1 - damping_ratio**2))*natural_frequency))**2)*(np.exp(-controller_time/(1/((damping_ratio*natural_frequency) + np.sqrt(np.abs(1 - damping_ratio**2))*natural_frequency)))))) - (2*damping_ratio/natural_frequency))
+                
                 return resp
                 
             if self.order == 1:
@@ -238,9 +239,9 @@ class TransferFunction():
                 
             return resp
             
-        resp = eval(self.input_resp[self.input_type])
+        resp = eval(input_resp[input_type])
         
-        plt.plot(self.controller_time, resp)
+        plt.plot(controller_time, resp)
         plt.show()
                           
         if ret == True:
@@ -265,23 +266,21 @@ class feedback(TransferFunction):
         None.
 
         '''
-        self.transfer_function1 = transfer_function1
-        self.transfer_function2 = transfer_function2
         
-        self.num1 = self.transfer_function1.num_coef
-        self.den1 = self.transfer_function1.den_coef
+        num1 = transfer_function1.num_coef
+        den1 = transfer_function1.den_coef
         
-        self.num2 = self.transfer_function2.num_coef
-        self.den2 = self.transfer_function2.den_coef
+        num2 = transfer_function2.num_coef
+        den2 = transfer_function2.den_coef
 
-        self.feedback_den0 =  float(self.den1[0])
-        self.feedback_den1 =  float(self.den1[1])
-        self.feedback_den2 =  float(self.num1[-1] + self.den1[2])
+        feedback_den0 =  float(den1[0])
+        feedback_den1 =  float(den1[1])
+        feedback_den2 =  float(num1[-1] + den1[2])
         
-        self.feedback_num = self.num1
-        self.feedback_den = np.array([self.feedback_den0, self.feedback_den1, self.feedback_den2])
+        feedback_num = num1
+        feedback_den = np.array([feedback_den0, feedback_den1, feedback_den2])
         
-        self.num_coef = self.feedback_num.reshape([len(self.feedback_num), 1])
-        self.den_coef = self.feedback_den.reshape([len(self.feedback_den), 1])
+        self.num_coef = feedback_num.reshape([len(feedback_num), 1])
+        self.den_coef = feedback_den.reshape([len(feedback_den), 1])
         
         self.feedback_tf = TransferFunction(self.num_coef, self.den_coef)
