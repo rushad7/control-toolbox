@@ -252,7 +252,7 @@ class feedback(TransferFunction):
     '''
     Add feedback TF to open loop TF. Define in standard form only.
     '''
-    def __init__(self, G, H=1.0):
+    def __init__(self, G, H=1.0, feedback_type="negative"):
         '''
         Parameters
         ----------
@@ -260,6 +260,8 @@ class feedback(TransferFunction):
             DESCRIPTION. TF the feedback is to be implemented on
         H : integer / float, optional
             DESCRIPTION. Feedback block (gain of feedback). The default is 1 (unity feedback)
+        feedback_type : Negative or Positive feedback, optional
+            DESCRIPTION. The default is "negative".
 
         Returns
         -------
@@ -269,10 +271,15 @@ class feedback(TransferFunction):
         
         num = G.num_coef
         den = G.den_coef
-
-        feedback_den0 =  float(den[0])
-        feedback_den1 =  float(den[1])
-        feedback_den2 =  float(den[2] + (num[-1]/H))
+        
+        if feedback_type == "negative":
+            feedback_den0 =  float(den[0])
+            feedback_den1 =  float(den[1])
+            feedback_den2 =  float(den[2] + (num[-1]/H))
+        elif feedback_type == "positive":
+            feedback_den0 =  float(den[0])
+            feedback_den1 =  float(den[1])
+            feedback_den2 =  float(den[2] - (num[-1]/H))
         
         feedback_num = num
         feedback_den = np.array([feedback_den0, feedback_den1, feedback_den2])
