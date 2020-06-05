@@ -120,12 +120,12 @@ class TransferFunction():
             self.gain = float(self.num_coef[0]/self.den_coef[2])
             self.natural_frequency = float(np.sqrt(self.den_coef[2]))
             self.damping_ratio = float(self.den_coef[1]/(2*self.natural_frequency))
-            self.damped_freq = self.natural_frequency*np.sqrt(1 - self.damping_ratio**2)
+            self.damped_freq = self.natural_frequency*np.sqrt(abs(1 - self.damping_ratio**2))
             self.phase_angle = float(np.arctan(np.sqrt(np.abs(1 - self.damping_ratio**2))/self.damping_ratio))            
-            self.rise_time = float((np.pi - self.phase_angle)/(self.natural_frequency*np.sqrt(1 - self.damping_ratio**2)))
-            self.peak_time = float(np.pi/(self.natural_frequency*np.sqrt(1 - self.damping_ratio**2)))
-            self.max_overshoot = float(np.exp((-self.damping_ratio*np.pi)/(np.sqrt(1 - self.damping_ratio**2)))*100)
-            self.settling_time = float(-np.log(self.settling_time_tolerance*np.sqrt(1 - self.damping_ratio**2))/(self.damping_ratio*self.natural_frequency))
+            self.rise_time = float((np.pi - self.phase_angle)/(self.natural_frequency*np.sqrt(abs(1 - self.damping_ratio**2))))
+            self.peak_time = float(np.pi/(self.natural_frequency*np.sqrt((abs(1 - self.damping_ratio**2)))))
+            self.max_overshoot = float(np.exp((-self.damping_ratio*np.pi)/(np.sqrt(abs( 1 - self.damping_ratio**2)))*100))
+            self.settling_time = float(-np.log(self.settling_time_tolerance*np.sqrt(abs(1 - self.damping_ratio**2)))/(self.damping_ratio*self.natural_frequency))
            
             parameter = {"Order":self.order, "Gain":self.gain,"Natural Frequency":self.natural_frequency, "Damping Frequency":self.damped_freq, "Damping Ratio":self.damping_ratio, "Phase Angle":self.phase_angle, "Rise Time":self.rise_time, "Peak Time":self.peak_time, "Max Overshoot":self.max_overshoot, "Settling Time":self.settling_time}
             return parameter     
@@ -191,7 +191,7 @@ class TransferFunction():
                 
                 natural_frequency = float(np.sqrt(self.den_coef[2]))
                 damping_ratio = float(self.den_coef[1]/(2*natural_frequency))
-                phase_angle = float(np.arctan(np.sqrt(1 - damping_ratio**2)/damping_ratio))
+                phase_angle = float(np.arctan(np.sqrt(abs(1 - damping_ratio**2))/damping_ratio))
                 
                 
                 if float(damping_ratio == 1):
