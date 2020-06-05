@@ -47,14 +47,14 @@ class TransferFunction():
             if n < len(self.num_coef)-1: #if not last
                 if n != len(self.num_coef)-2: #if not second last
                     if self.num_coef[n] != 1 and self.num_coef[n] != 0: #if coef is not zero and one
-                        num_str = num_str + str(int(self.num_coef[n])) + "*S^" + str(abs(n-len(self.num_coef)+1)) + " + "
+                        num_str = num_str + str(float(self.num_coef[n])) + "*S^" + str(abs(n-len(self.num_coef)+1)) + " + "
                     elif self.num_coef[n] == 1: #if coef is one
                         num_str = num_str + "S^" + str(abs(n-len(self.num_coef)+1)) + " + "
                     elif self.num_coef[n] == 0: #if coef is zero
                         pass
                 else: #if second last
                     if self.num_coef[n] != 1 and self.num_coef[n] != 0: #if coef is not zero and one
-                        num_str = num_str + str(int(self.num_coef[n])) + "*S" + " + "
+                        num_str = num_str + str(float(self.num_coef[n])) + "*S" + " + "
                     elif self.num_coef[n] == 1: #if coef is one
                         num_str = num_str  + "S" + " + "
                     elif self.num_coef[n] == 0: #if coef is zero
@@ -62,7 +62,7 @@ class TransferFunction():
                         
             else: #if last
                 if self.num_coef[n] != 0: #if coef is not zero
-                    num_str = num_str + str(int(self.num_coef[n]))
+                    num_str = num_str + str(float(self.num_coef[n]))
                 elif self.num_coef[n] == 0: #if coef is zero
                     num_str = num_str[:-3]
                   
@@ -71,21 +71,21 @@ class TransferFunction():
             if d < len(self.den_coef)-1: #if not last 
                 if d != len(self.den_coef)-2: #if not second last
                     if self.den_coef[d] != 1 and self.den_coef[d] != 0: #if coef not zero and one
-                        den_str = den_str + str(int(self.den_coef[d])) + "*S^" + str(abs(d-len(self.den_coef)+1)) + " + "
+                        den_str = den_str + str(float(self.den_coef[d])) + "*S^" + str(abs(d-len(self.den_coef)+1)) + " + "
                     elif self.den_coef[d] == 1: #if coef is one
                         den_str = den_str + "S^" + str(abs(d-len(self.den_coef)+1)) + " + "
                     elif self.den_coef[d] == 0: #if coef is zero
                         pass
                 else: #if second last
                     if self.den_coef[d] != 1 and self.den_coef[d] != 0: #if coef is not zero and one
-                        den_str = den_str + str(int(self.den_coef[d])) + "*S" + " + "
+                        den_str = den_str + str(float(self.den_coef[d])) + "*S" + " + "
                     elif self.den_coef[d] == 1: #if coef is one
                         den_str = den_str  + "S" + " + "
                     elif self.den_coef[d] == 0: #if coef is zero
                         pass
             else: #if last
                 if self.den_coef[d] != 0: #if coef is not zero
-                    den_str = den_str + str(int(self.den_coef[d]))
+                    den_str = den_str + str(float(self.den_coef[d]))
                 elif self.den_coef[d] == 0: #if coef is zero
                     den_str = den_str[:-3]
         
@@ -94,7 +94,7 @@ class TransferFunction():
         tf_disp = str(num_str + " \n" + div_line + " \n" + den_str)
         print(tf_disp)
         
-    def parameters(self, settling_time_tolerance=0.05):
+    def parameters(self, settling_time_tolerance=0.02):
         '''
         Parameters
         ----------
@@ -121,11 +121,11 @@ class TransferFunction():
             self.natural_frequency = float(np.sqrt(self.den_coef[2]))
             self.damping_ratio = float(self.den_coef[1]/(2*self.natural_frequency))
             self.damped_freq = self.natural_frequency*np.sqrt(1 - self.damping_ratio**2)
-            self.phase_angle = float(np.arctan(self.damping_ratio/np.sqrt(np.abs(1 - self.damping_ratio**2))))            
+            self.phase_angle = float(np.arctan(np.sqrt(np.abs(1 - self.damping_ratio**2))/self.damping_ratio))            
             self.rise_time = float((np.pi - self.phase_angle)/(self.natural_frequency*np.sqrt(1 - self.damping_ratio**2)))
             self.peak_time = float(np.pi/(self.natural_frequency*np.sqrt(1 - self.damping_ratio**2)))
             self.max_overshoot = float(np.exp((-self.damping_ratio*np.pi)/(np.sqrt(1 - self.damping_ratio**2)))*100)
-            self.settling_time = float(-np.log((self.settling_time_tolerance*np.sqrt(1 - self.damping_ratio**2))/(self.damping_ratio*self.natural_frequency)))
+            self.settling_time = float(-np.log(self.settling_time_tolerance*np.sqrt(1 - self.damping_ratio**2))/(self.damping_ratio*self.natural_frequency))
            
             parameter = {"Order":self.order, "Gain":self.gain,"Natural Frequency":self.natural_frequency, "Damping Frequency":self.damped_freq, "Damping Ratio":self.damping_ratio, "Phase Angle":self.phase_angle, "Rise Time":self.rise_time, "Peak Time":self.peak_time, "Max Overshoot":self.max_overshoot, "Settling Time":self.settling_time}
             return parameter     
@@ -250,16 +250,16 @@ class TransferFunction():
     
 class feedback(TransferFunction):
     '''
-    Add feedback TF to open loop TF. Define i standard form only.
+    Add feedback TF to open loop TF. Define in standard form only.
     '''
-    def __init__(self, transfer_function1, transfer_function2):
+    def __init__(self, G, H=1.0):
         '''
         Parameters
         ----------
-        transfer_function1 : TransferFunction object
-            DESCRIPTION. TF of the plant on which feedback is needed 
-        transfer_function2 : TransferFunction object
-            DESCRIPTION. TF of feedback block
+        G : TransferFunction object
+            DESCRIPTION. TF the feedback is to be implemented on
+        H : integer / float, optional
+            DESCRIPTION. Feedback block (gain of feedback). The default is 1 (unity feedback)
 
         Returns
         -------
@@ -267,20 +267,18 @@ class feedback(TransferFunction):
 
         '''
         
-        num1 = transfer_function1.num_coef
-        den1 = transfer_function1.den_coef
-        
-        num2 = transfer_function2.num_coef
-        den2 = transfer_function2.den_coef
+        num = G.num_coef
+        den = G.den_coef
 
-        feedback_den0 =  float(den1[0])
-        feedback_den1 =  float(den1[1])
-        feedback_den2 =  float(num1[-1] + den1[2])
+        feedback_den0 =  float(den[0])
+        feedback_den1 =  float(den[1])
+        feedback_den2 =  float(den[2] + (num[-1]/H))
         
-        feedback_num = num1
+        feedback_num = num
         feedback_den = np.array([feedback_den0, feedback_den1, feedback_den2])
         
         self.num_coef = feedback_num.reshape([len(feedback_num), 1])
         self.den_coef = feedback_den.reshape([len(feedback_den), 1])
         
         self.feedback_tf = TransferFunction(self.num_coef, self.den_coef)
+        self.order = self.feedback_tf.order
