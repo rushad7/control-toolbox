@@ -5,8 +5,11 @@ Created on Thu May 28 19:31:48 2020
 @author: Rushad
 """
 
+import warnings
 import numpy as np
 import matplotlib.pyplot as plt
+
+warnings.filterwarnings("ignore")
 
 class TransferFunction():
     '''
@@ -246,6 +249,21 @@ class TransferFunction():
                           
         if ret == True:
             return resp
+
+    def pzplot(self):
+        '''
+        Plots Pole-Zero plot of the system
+        '''
+        
+        if len(self.num_coef > 1): 
+            self.zeros = np.roots(self.num_coef.reshape(len(self.num_coef))) 
+            plt.plot(self.zeros, "o", label="Zeros")
+        if len(self.den_coef > 1):
+            self.poles = np.roots(self.den_coef.reshape(len(self.den_coef)))
+            plt.plot(self.poles, "x", label="Poles")
+            
+        plt.legend()
+        plt.show()
 
     
 class feedback(TransferFunction):
