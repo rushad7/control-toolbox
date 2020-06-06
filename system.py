@@ -265,7 +265,25 @@ class TransferFunction():
         plt.legend()
         plt.show()
 
-    
+    def stability(self):
+
+        if len(self.den_coef > 1):
+            poles = np.roots(self.den_coef.reshape(len(self.den_coef)))
+            cond = poles.real < 0        
+            
+            if np.mean(cond) == 1:
+                state = "System is Stable"
+            else:
+                state = "System is Unstable"
+            poles_round = np.array(poles.real, dtype="int")
+            if np.count_nonzero(poles_round) < len(poles_round) and np.sum(poles.real) < 0:
+                if np.sum(poles) == np.sum(np.unique(poles)):
+                    state = "System is Marginally Stable"
+                else:
+                    state = "System in Unstable"
+                    
+        print(state)
+
 class feedback(TransferFunction):
     '''
     Add feedback TF to open loop TF. Define in standard form only.
