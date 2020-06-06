@@ -282,7 +282,7 @@ class TransferFunction():
                 else:
                     state = "System in Unstable"
                     
-        print(state)
+        return state
 
 class feedback(TransferFunction):
     '''
