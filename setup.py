@@ -1,9 +1,10 @@
-from distutils.core import setup
+from setuptools import setup, find_packages
 
-setup(
-    name='control-system',
-    packages=['control'],
-    version='1.0.0',
-    description='Control Systems Toolbox for Python',
-    url='https://github.com/rushad7/control-toolbox',    
-)
+setup(name='control-system',
+      version='0.0.1',
+      description='Control Systems Toolbox for Python',
+      author='Rushad Mehta',
+      author_email='rushadmehta16@gmail.com',
+      url='https://github.com/rushad7/control-toolbox',
+      packages=find_packages(),
+     )
