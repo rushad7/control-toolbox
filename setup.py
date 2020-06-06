@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-setup(name='control-system',
+setup(name='control-toolbox',
       version='0.0.1',
       description='Control Systems Toolbox for Python',
       author='Rushad Mehta',
