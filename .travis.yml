@@ -8,11 +8,10 @@ before_install:
   - "pip install -U pip"
   - "pip install -U pytest"
   - "pip install codecov"
-  - "pip install -U pip"
   - "export PYTHONPATH=$PYTHONPATH:$(pwd)"
   - "python setup.py install"
 install:
   - pip install -r requirements.txt
 script: "python setup.py develop && pytest"
 after_success:
-  - codecov
+  - "codecov"
