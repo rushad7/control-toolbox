@@ -7,7 +7,6 @@ before_install:
   - "python --version"
   - "pip install -U pip"
   - "pip install -U pytest"
-  - "pip install -r test_requirements.txt --use-mirrors"
   - "git clone https://github.com/z4r/python-coveralls-example.git"
   - "cd python-coveralls-example"
   - "git checkout -qf 17b8119796516195527dcb4f454a2ebd41d60244"
