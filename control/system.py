@@ -254,20 +254,16 @@ class TransferFunction():
         
         
 
-    def pzplot(self):
+    def pzplot(self, ret=True):
         '''
         Plots Pole-Zero plot of the system
         '''
         
-        if len(self.num_coef) > 1: 
+        if len(self.num_coef) >= 1: 
             self.zeros = np.roots(self.num_coef.reshape(len(self.num_coef)))
-            print(self.zeros)
             plt.plot(self.zeros.real, self.zeros.imag, "o", label="Zeros")
-        if len(self.den_coef) > 1:
+        if len(self.den_coef) >= 1:
             self.poles = np.roots(self.den_coef.reshape(len(self.den_coef)))
-            print(self.poles)
-            print(self.poles.real)
-            print(self.poles.imag)
             plt.plot(self.poles.real, self.poles.imag, "x", label="Poles")
         
         plt.xlabel('Re')
@@ -275,23 +271,32 @@ class TransferFunction():
         plt.grid(True, which="both")
         plt.legend()
         plt.show()
+        
+        if ret == True:
+            return self.poles, self.zeros
 
     def stability(self):
-
-        if len(self.den_coef > 1):
-            poles = np.roots(self.den_coef.reshape(len(self.den_coef)))
-            cond = poles.real < 0        
+        '''
+        Returns
+        -------
+        state : String
+            Prints stability of the system
+        '''
+        
+        if len(self.den_coef >= 1):
+            poles = np.roots(self.den_coef.reshape(len(self.den_coef)))     
+            poles_round = np.array(poles.imag, dtype="int")
             
-            if np.mean(cond) == 1:
+            if (poles.real < 0).all():
                 state = "System is Stable"
-            else:
-                state = "System is Unstable"
-            poles_round = np.array(poles.real, dtype="int")
-            if np.count_nonzero(poles_round) < len(poles_round) and np.sum(poles.real) < 0:
+                            
+            elif np.count_nonzero(poles_round) != len(poles_round) and (poles.real <= 0).all():
                 if np.sum(poles) == np.sum(np.unique(poles)):
                     state = "System is Marginally Stable"
                 else:
                     state = "System in Unstable"
+            else:
+                state = "System is Unstable"
                     
         return state
 
