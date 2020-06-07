@@ -14,7 +14,6 @@ warnings.filterwarnings("ignore")
 class TransferFunction():
     '''
     Define the Transfer Functions in standard form only.
-    Currently supports first and second order systems
     '''
     def __init__(self, num_coef, den_coef):
         '''
@@ -34,10 +33,7 @@ class TransferFunction():
         self.den_coef = np.array(den_coef)
         self.num_coef = self.num_coef.reshape([len(self.num_coef), 1])
         self.den_coef = self.den_coef.reshape([len(self.den_coef), 1])
-        self.order = max(len(self.num_coef), len(self.den_coef)) - 1
-        
-        if (max(len(self.num_coef), len(self.den_coef))-1 > 2):
-            print("[WARNING] You have inputed a system of Order:" + str(max(len(self.num_coef), len(self.den_coef))-1) + "\n" + "Current support is for first and second order systems\n Continuing WILL NOT produce correct results")
+        self.order = max(len(self.num_coef), len(self.den_coef)) - 1        
             
     def display(self):
         '''
@@ -119,7 +115,7 @@ class TransferFunction():
             parameter = {"Order":self.order, "Gain":self.gain, "Time Constant":self.time_constant}
             return parameter
             
-        if self.order == 2:
+        elif self.order == 2:
             self.gain = float(self.num_coef[0]/self.den_coef[2])
             self.natural_frequency = float(np.sqrt(self.den_coef[2]))
             self.damping_ratio = float(self.den_coef[1]/(2*self.natural_frequency))
@@ -131,7 +127,10 @@ class TransferFunction():
             self.settling_time = float(-np.log(self.settling_time_tolerance*np.sqrt(abs(1 - self.damping_ratio**2)))/(self.damping_ratio*self.natural_frequency))
            
             parameter = {"Order":self.order, "Gain":self.gain,"Natural Frequency":self.natural_frequency, "Damping Frequency":self.damped_freq, "Damping Ratio":self.damping_ratio, "Phase Angle":self.phase_angle, "Rise Time":self.rise_time, "Peak Time":self.peak_time, "Max Overshoot":self.max_overshoot, "Settling Time":self.settling_time}
-            return parameter     
+            return parameter
+        
+        elif self.order > 2:
+            print("[WARNING] You have inputed a system of Order:" + str(max(len(self.num_coef), len(self.den_coef))-1) + ". Currently supports first and second order systems")
            
     def response(self, input_type, time_period=5, sample_time=0.2, ret=False):
         '''
@@ -238,30 +237,42 @@ class TransferFunction():
             if self.order == 1:
                 resp = ramp_order1(self)
             elif self.order == 2:
-                resp = float(self.num_coef[0]/self.den_coef[2])*ramp_order2(self)
+                resp = float(self.num_coef[0]/self.den_coef[2])*ramp_order2(self) 
                 
             return resp
-            
-        resp = eval(input_resp[input_type])
         
-        plt.plot(controller_time, resp)
-        plt.show()
-                          
-        if ret == True:
-            return resp
+        if self.order <= 2:
+            resp = eval(input_resp[input_type])
+            plt.plot(controller_time, resp)
+            plt.show()
+            
+            if ret == True:
+                return resp
+            
+        elif self.order > 2:
+                print("[WARNING] You have inputed a system of Order:" + str(max(len(self.num_coef), len(self.den_coef))-1) + ". Currently supports first and second order systems")
+        
+        
 
     def pzplot(self):
         '''
         Plots Pole-Zero plot of the system
         '''
         
-        if len(self.num_coef > 1): 
-            self.zeros = np.roots(self.num_coef.reshape(len(self.num_coef))) 
-            plt.plot(self.zeros, "o", label="Zeros")
-        if len(self.den_coef > 1):
+        if len(self.num_coef) > 1: 
+            self.zeros = np.roots(self.num_coef.reshape(len(self.num_coef)))
+            print(self.zeros)
+            plt.plot(self.zeros.real, self.zeros.imag, "o", label="Zeros")
+        if len(self.den_coef) > 1:
             self.poles = np.roots(self.den_coef.reshape(len(self.den_coef)))
-            plt.plot(self.poles, "x", label="Poles")
-            
+            print(self.poles)
+            print(self.poles.real)
+            print(self.poles.imag)
+            plt.plot(self.poles.real, self.poles.imag, "x", label="Poles")
+        
+        plt.xlabel('Re')
+        plt.ylabel('Im')
+        plt.grid(True, which="both")
         plt.legend()
         plt.show()
 
