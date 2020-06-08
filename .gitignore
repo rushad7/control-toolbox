@@ -1,3 +1,4 @@
 /.pytest_cache/*
 /control/__pycache__/*
 /tests/__pycache__/*
+/dist/*
