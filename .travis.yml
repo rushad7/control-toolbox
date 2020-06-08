@@ -7,7 +7,6 @@ before_install:
   - "python --version"
   - "pip install -U pip"
   - "pip install -U pytest"
-  - "python setup.py install"
   - "export PYTHONPATH=$PYTHONPATH:$(pwd)"
 install:
   - pip install -r requirements.txt
