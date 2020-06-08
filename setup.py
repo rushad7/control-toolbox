@@ -1,7 +1,7 @@
-from distutils.core import setup, find_packages
+from distutils.core import setup
 setup(
   name = 'control-toolbox',
-  packages = find_packages(),
+  packages = 'control',
   version = '0.1', 
   license='MIT',
   description = 'Python Control System Toolbox',
