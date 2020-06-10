@@ -2,3 +2,4 @@
 /control/__pycache__/*
 /tests/__pycache__/*
 /dist/*
+/control_toolbox.egg-info
