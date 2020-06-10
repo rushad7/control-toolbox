@@ -18,6 +18,7 @@ setup(
   keywords = ['Control Systems', 'Python Control Toolbox', 'System Simulation'],
   install_requires=[
           'numpy',
+          'scipy',
           'matplotlib',
       ],
   classifiers=[
