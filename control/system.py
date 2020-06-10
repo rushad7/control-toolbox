@@ -7,6 +7,7 @@ Created on Thu May 28 19:31:48 2020
 
 import warnings
 import numpy as np
+from scipy import signal
 import matplotlib.pyplot as plt
 
 warnings.filterwarnings("ignore")
@@ -132,7 +133,7 @@ class TransferFunction():
         elif self.order > 2:
             print("[WARNING] You have inputed a system of Order:" + str(max(len(self.num_coef), len(self.den_coef))-1) + ". Currently supports first and second order systems")
            
-    def response(self, input_type, time_period=5, sample_time=0.2, ret=False):
+    def response(self, input_type, time_period=5, sample_time=0.05, ret=False):
         '''
         Parameters
         ----------
@@ -157,63 +158,16 @@ class TransferFunction():
         
         def impulse(self):
             
-            def impulse_order1(self):
-                resp = (float(self.num_coef[0])/float(self.den_coef[0]))*np.exp(-controller_time/float(self.den_coef[0]))
-                return resp
-            
-            def impulse_order2(self):
-                
-                natural_frequency = float(np.sqrt(self.den_coef[2]))
-                damping_ratio = float(self.den_coef[1]/(2*natural_frequency))
-                
-                if float(damping_ratio) > 1: 
-                    resp = (natural_frequency/(np.sqrt(damping_ratio**2 - 1)))*np.exp(-damping_ratio*natural_frequency*controller_time)*np.sinh(natural_frequency*np.sqrt(damping_ratio**2 - 1)*controller_time)
-                elif float(damping_ratio) < 1:
-                    resp = (natural_frequency/(np.sqrt(1 - damping_ratio**2)))*np.exp(-damping_ratio*natural_frequency*controller_time)*np.sin(natural_frequency*np.sqrt(1- damping_ratio**2)*controller_time)                
-                elif float(damping_ratio) == 1:
-                    resp = (natural_frequency**2)*controller_time*(np.exp(-natural_frequency*controller_time))
-                elif float(damping_ratio) == 0:
-                    resp = natural_frequency*np.sin(natural_frequency*controller_time)
-                return resp
-        
-            if self.order == 1:
-                resp = impulse_order1(self)
-            elif self.order == 2:
-                resp = (float(self.num_coef[0]/self.den_coef[2]))*impulse_order2(self)
-                
+            sys = signal.lti(self.num_coef.reshape(len(self.num_coef)), self.den_coef.reshape(len(self.den_coef)))
+            _,resp = signal.impulse(sys, T=controller_time)
             return resp
         
         def step(self):
             
-            def step_order1(self):
-                resp = float(self.num_coef[0])*(1 - np.exp(-controller_time/float(self.den_coef[0])))
-                return resp
-            
-            def step_order2(self):
-                
-                natural_frequency = float(np.sqrt(self.den_coef[2]))
-                damping_ratio = float(self.den_coef[1]/(2*natural_frequency))
-                phase_angle = float(np.arctan(np.sqrt(abs(1 - damping_ratio**2))/damping_ratio))
-                
-                
-                if float(damping_ratio == 1):
-                    resp = 1 - (1 + (natural_frequency*controller_time))*np.exp(-damping_ratio*natural_frequency*controller_time)
-                elif float(damping_ratio < 1):
-                    resp = 1 - ((np.exp(-damping_ratio*natural_frequency*controller_time)/np.sqrt(1 - damping_ratio**2))*np.sin(natural_frequency*np.sqrt(1 - damping_ratio**2)*controller_time + phase_angle))
-                elif float(damping_ratio > 1):
-                    resp = 1 - (np.exp(-damping_ratio*natural_frequency*controller_time)/(2*np.sqrt(damping_ratio**2 - 1)))*((np.exp(natural_frequency*np.sqrt(damping_ratio**2 - 1)*controller_time)/(damping_ratio - np.sqrt(damping_ratio**2 - 1))) + (np.exp(-natural_frequency*np.sqrt(damping_ratio**2 - 1)*controller_time)/(damping_ratio + np.sqrt(damping_ratio**2 - 1))))
-                elif float(damping_ratio == 0):
-                    resp = 1 - (np.e*np.sin(natural_frequency*controller_time + 1.5707963267948966))        
-                
-                return resp
-            
-            if self.order == 1:
-                resp = step_order1(self)
-            elif self.order == 2:
-                resp = (float(self.num_coef[0]/self.den_coef[2]))*step_order2(self)
-                
-            return resp
-        
+            sys = signal.lti(self.num_coef.reshape(len(self.num_coef)), self.den_coef.reshape(len(self.den_coef)))
+            _,resp = signal.step(sys, T=controller_time)
+            return resp        
+                        
         def ramp(self):
             
             def ramp_order1(self):
@@ -236,23 +190,20 @@ class TransferFunction():
                 
             if self.order == 1:
                 resp = ramp_order1(self)
+                return resp
             elif self.order == 2:
                 resp = float(self.num_coef[0]/self.den_coef[2])*ramp_order2(self) 
-                
-            return resp
-        
-        if self.order <= 2:
-            resp = eval(input_resp[input_type])
-            plt.plot(controller_time, resp)
-            plt.show()
-            
-            if ret == True:
                 return resp
+            elif self.order > 2:
+                print("[WARNING] You have inputed a system of Order:" + str(max(len(self.num_coef), len(self.den_coef))-1) + ". Ramp response currently supports first and second order systems")
             
-        elif self.order > 2:
-                print("[WARNING] You have inputed a system of Order:" + str(max(len(self.num_coef), len(self.den_coef))-1) + ". Currently supports first and second order systems")
-        
-        
+        resp = eval(input_resp[input_type])
+        plt.plot(controller_time, resp)
+        plt.show()
+            
+        if ret == True:
+            return resp
+            
 
     def pzplot(self, ret=True):
         '''
