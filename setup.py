@@ -1,6 +1,6 @@
-from distutils.core import setup
+from setuptools import setup
 
-with open('README.md') as fp:
+with open('README.md', 'r') as fp:
     long_description = fp.read()
 
 setup(
@@ -10,6 +10,7 @@ setup(
   license='MIT',
   description = 'Python Control System Toolbox',
   long_description=long_description,
+  long_description_content_type='text/markdown',
   author = 'Rushad Mehta',
   author_email = 'rushadmehta16@gmail.com',
   url = 'https://control-toolbox.readthedocs.io/',
