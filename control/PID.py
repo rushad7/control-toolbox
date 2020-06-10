@@ -9,19 +9,15 @@ import matplotlib.pyplot as plt
 
 class PID():
     
-    def __init__(self, K_p, K_i, K_d, transfer_function, input_type, time_period=3):
+    def __init__(self, K_p, K_i, K_d, tf, time_period=3):
         
         self.K_p = K_p
         self.K_i = K_i
         self.K_d = K_d
-        self.transfer_function = transfer_function
-        self.input_type = input_type
+        self.tf = tf
         self.time_period = time_period
         self.inputs = {"impulse" : "[1 if i == 0 else 0 for i in np.arange(0, self.time_period, 0.2)]", "step" : "[1 for i in np.arange(0, self.time_period, 0.2)]", "ramp" : " [i for i in np.arange(0, self.time_period, 0.2)]"}
         
-    def init(self):        
-        pid_controller = {"kp":self.K_p, "ki":self.K_i, "kd":self.K_d}
-        return pid_controller
     
     def display(self):
         '''
@@ -35,50 +31,38 @@ class PID():
         pid_tf_disp = str(self.num_str + " \n" + self.div_line + " \n" + self.den_str)
         print(pid_tf_disp)
         
-    def response(self):
-        norm_response = []
-        pid_response = []
-        self.controller_input = eval(self.inputs[self.input_type])
-        for s in self.controller_input:
-            try:
-                pid_response_elem = (float(self.K_d) + s**2 + float(self.K_p) + s + float(self.K_i))/s
-            except ZeroDivisionError:
-                pass
-            
-            power_num = len(self.transfer_function["num"]) - 1
-            temp_vect_num = np.zeros(shape=(len(self.transfer_function["num"])))
-            
-            for temp in range(len(temp_vect_num)):
-                temp_vect_num[temp] = (s**(power_num-temp))*self.transfer_function["num"][temp]
-            tf_num = np.sum(temp_vect_num)
-
-            power_den = len(self.transfer_function["den"]) - 1            
-            temp_vect_den = np.zeros(shape=(len(self.transfer_function["den"])))
-            
-            for temp in range(len(temp_vect_den)):
-                temp_vect_den[temp] = (s**(power_den-temp))*self.transfer_function["den"][temp]
-            tf_den = np.sum(temp_vect_den)
-            
-            try:
-                tf_total = tf_num/tf_den
-            except ZeroDivisionError:
-                pass
-            
-            total_response = pid_response_elem + tf_total
-            norm_response.append(tf_total)
-            pid_response.append(total_response)
+    def response(self, input_type):
         
-        plt.plot(self.controller_input, norm_response)
-        plt.plot(self.controller_input, pid_response)
-        return pid_response, norm_response
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
+        pid_num = [self.K_d, self.K_p, self.K_i]
+        pid_den = [1]
+        num = self.tf.num_coef
+        den = self.tf.den_coef
+        tf_num = list(self.tf.num_coef.reshape(len(num),))
+        tf_den = list(self.tf.den_coef.reshape(len(den),))
+        
+        num_size = max(len(pid_num), len(tf_num))
+        den_size = max(len(pid_den), len(tf_den))
+        
+        num_diff = len(pid_num) - len(tf_num)
+        den_diff = len(pid_den) - len(tf_den)
+        
+        try:
+            if len(tf_num) < len(pid_num):
+                temp_num = np.zeros(num_diff)
+                tf_num = np.concatenate((temp_num, tf_num))
+            elif len(tf_num) > len(pid_num):
+                temp_num = np.zeros(abs(num_diff))
+                pid_num = np.concatenate((temp_num, pid_num))
+                            
+            if len(tf_den) < len(pid_den):
+                temp_den = np.zeros(den_diff)
+                tf_den = np.concatenate((temp_den, tf_den))
+            elif len(tf_den) > len(pid_den):
+                temp_den = np.zeros(abs(den_diff))
+                pid_den = np.concatenate((temp_den, pid_den))
+            
+        except ValueError:
+            pass
+        
+        print(tf_num, pid_num)
+        print(tf_den, pid_den)
