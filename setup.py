@@ -6,7 +6,7 @@ with open('README.md', 'r') as fp:
 setup(
   name = 'control-toolbox',
   packages = ['control'],
-  version = '0.0.1', 
+  version = '0.0.2', 
   license='MIT',
   description = 'Python Control System Toolbox',
   long_description=long_description,
