@@ -5,9 +5,8 @@ Created on Fri May 29 14:28:21 2020
 @author: Rushad
 """
 
-import system
+import control.system as system
 import numpy as np
-import matplotlib.pyplot as plt
 
 class PID():
     
@@ -26,10 +25,7 @@ class PID():
         
         tf_num = list(tf.num_coef.reshape(len(num),))
         tf_den = list(tf.den_coef.reshape(len(den),))
-        
-        num_size = max(len(pid_num), len(tf_num))
-        den_size = max(len(pid_den), len(tf_den))
-        
+                
         num_diff = len(pid_num) - len(tf_num)
         den_diff = len(pid_den) - len(tf_den)
         
