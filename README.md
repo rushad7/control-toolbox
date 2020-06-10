@@ -22,9 +22,9 @@ The `control-toolbox` is a Python Library for implementing and simulating variou
 - Kalman Filter.
 
 ## Project Links
-Project Homepage: http://control-toolbox.rtfd.io/
-Documentation: [https://control-toolbox.readthedocs.io/](https://control-toolbox.readthedocs.io/)
-Source Code: [https://github.com/rushad7/control-toolbox](https://github.com/rushad7/control-toolbox)
+Project Homepage: http://control-toolbox.rtfd.io/  
+Documentation: [https://control-toolbox.readthedocs.io/](https://control-toolbox.readthedocs.io/)  
+Source Code: [https://github.com/rushad7/control-toolbox](https://github.com/rushad7/control-toolbox)  
 
 ## Installation
 ### Pip
