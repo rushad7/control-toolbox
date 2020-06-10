@@ -1,11 +1,15 @@
 from distutils.core import setup
 
+with open('README.rst') as fp:
+    long_description = fp.read()
+
 setup(
   name = 'control-toolbox',
   packages = ['control'],
   version = '0.1.1', 
   license='MIT',
   description = 'Python Control System Toolbox',
+  long_description=long_description,
   author = 'Rushad Mehta',
   author_email = 'rushadmehta16@gmail.com',
   url = 'https://github.com/rushad7/control-toolbox',
