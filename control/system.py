@@ -133,16 +133,16 @@ class TransferFunction():
         elif self.order > 2:
             print("[WARNING] You have inputed a system of Order:" + str(max(len(self.num_coef), len(self.den_coef))-1) + ". Currently supports first and second order systems")
            
-    def response(self, input_type, time_period=5, sample_time=0.05, ret=False):
+    def response(self, input_type, time_period=10, sample_time=0.05, ret=False):
         '''
         Parameters
         ----------
         input_type : string
             DESCRIPTION. input signal type: impulse, step or ramp
         time_period : integer, optional
-            DESCRIPTION. The time duration the signal is processed for. The default is 5.
+            DESCRIPTION. The time duration the signal is processed for. The default is 10.
         sample_time : float, optional
-            DESCRIPTION. Sample time of the signal. The default is 0.2.
+            DESCRIPTION. Sample time of the signal. The default is 0.05.
         ret : bool, optional
             DESCRIPTION. Set to True if the systems response is to be returned. The default is False.
 
