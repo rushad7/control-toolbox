@@ -1,6 +1,6 @@
 from distutils.core import setup
 
-with open('README.rst') as fp:
+with open('README.md') as fp:
     long_description = fp.read()
 
 setup(
