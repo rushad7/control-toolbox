@@ -1,6 +1,7 @@
 # Python Control Systems Toolbox
 [![Build Status](https://travis-ci.com/rushad7/control-toolbox.svg?branch=master)](https://travis-ci.com/rushad7/control-toolbox)
 [![Documentation Status](https://readthedocs.org/projects/control-toolbox/badge/?version=latest)](https://control-toolbox.readthedocs.io/en/latest/?badge=latest)
+[![PyPI version](https://badge.fury.io/py/control-toolbox.svg)](https://badge.fury.io/py/control-toolbox)
 ![GitHub](https://img.shields.io/github/license/rushad7/control-toolbox)  
 
 The `control-toolbox` is a Python Library for implementing and simulating various systems and control strategies.
