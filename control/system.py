@@ -7,7 +7,7 @@ Created on Thu May 28 19:31:48 2020
 
 import warnings
 import numpy as np
-from scipy import signal
+from scipy import signal, polyval
 import matplotlib.pyplot as plt
 
 warnings.filterwarnings("ignore")
@@ -133,7 +133,7 @@ class TransferFunction():
         elif self.order > 2:
             print("[WARNING] You have inputed a system of Order:" + str(max(len(self.num_coef), len(self.den_coef))-1) + ". Currently supports first and second order systems")
            
-    def response(self, input_type, time_period=10, sample_time=0.05, ret=False):
+    def response(self, input_type, time_period=10, sample_time=0.05, ret=False, show=True):
         '''
         Parameters
         ----------
@@ -145,7 +145,8 @@ class TransferFunction():
             DESCRIPTION. Sample time of the signal. The default is 0.05.
         ret : bool, optional
             DESCRIPTION. Set to True if the systems response is to be returned. The default is False.
-
+        show : bool, optional
+            DESCRIPTION. Set to True if the systems response is to be displayed. The default is True.
         Returns
         -------
         resp : numpy array
@@ -198,13 +199,14 @@ class TransferFunction():
                 print("[WARNING] You have inputed a system of Order:" + str(max(len(self.num_coef), len(self.den_coef))-1) + ". Ramp response currently supports first and second order systems")
             
         resp = eval(input_resp[input_type])
-        plt.plot(controller_time, resp)
-        plt.show()
+        
+        if show == True:
+            plt.plot(controller_time, resp)
+            plt.show()
             
         if ret == True:
             return resp
             
-
     def pzplot(self, ret=True):
         '''
         Plots Pole-Zero plot of the system
@@ -292,3 +294,141 @@ class feedback(TransferFunction):
         
         self.feedback_tf = TransferFunction(self.num_coef, self.den_coef)
         self.order = self.feedback_tf.order
+        
+class PID():
+    '''
+    PID control on a TF
+    '''
+    
+    def __init__(self, K_p, K_i, K_d, tf):
+        '''
+        Parameters
+        ----------
+        K_p : float
+            DESCRIPTION. Proportional Gain
+        K_i : float
+            DESCRIPTION. Integral Gain
+        K_d : float
+            DESCRIPTION. Derivative Gain
+        tf : TranferFunction object
+            DESCRIPTION. TF on which PID is to be implemeted
+
+        Returns
+        -------
+        None.
+
+        '''
+        self.K_p = K_p
+        self.K_i = K_i
+        self.K_d = K_d
+        self.tf = tf
+        
+        pid_num = [self.K_d, self.K_p, self.K_i]
+        pid_den = [1, 0]
+        
+        num = tf.num_coef
+        den = tf.den_coef
+        
+        tf_num = list(tf.num_coef.reshape(len(num),))
+        tf_den = list(tf.den_coef.reshape(len(den),))
+                
+        num_diff = len(pid_num) - len(tf_num)
+        den_diff = len(pid_den) - len(tf_den)
+        
+        try:
+            if len(tf_num) < len(pid_num):
+                temp_num = np.zeros(num_diff)
+                tf_num = np.concatenate((temp_num, tf_num))
+            elif len(tf_num) > len(pid_num):
+                temp_num = np.zeros(abs(num_diff))
+                pid_num = np.concatenate((temp_num, pid_num))
+                            
+            if len(tf_den) < len(pid_den):
+                temp_den = np.zeros(den_diff)
+                tf_den = np.concatenate((temp_den, tf_den))
+            elif len(tf_den) > len(pid_den):
+                temp_den = np.zeros(abs(den_diff))
+                pid_den = np.concatenate((temp_den, pid_den))
+            
+        except ValueError:
+            pass
+        
+        reduced_tf_num = np.polymul(np.array(tf_num), np.array(pid_num))
+        reduced_tf_den = np.polymul(np.array(tf_den), np.array(pid_den))
+        self.reduced_tf = TransferFunction(reduced_tf_num, reduced_tf_den)
+    
+    def display(self):
+        '''
+        Displays the PID TF block
+
+        '''
+        self.num_str = str(self.K_d) + "*S^2 + " + str(self.K_p) + "*S + " + str(self.K_i) 
+        self.den_str = round(len(self.num_str)/2)*" " + "S" + " "*round(len(self.num_str)/2)
+        self.div_line_len = max(len(self.num_str), len(self.den_str))
+        self.div_line = self.div_line_len*"-"
+        pid_tf_disp = str(self.num_str + " \n" + self.div_line + " \n" + self.den_str)
+        print(pid_tf_disp)
+        
+    def response(self, input_type, time_period=10, sample_time=0.05, ret=False, show=True):
+        '''
+        Parameters
+        ----------
+        input_type : string
+            DESCRIPTION. input signal type: impulse, step or ramp
+        time_period : integer, optional
+            DESCRIPTION. The time duration the signal is processed for. The default is 10.
+        sample_time : float, optional
+            DESCRIPTION. Sample time of the signal. The default is 0.05.
+        ret : bool, optional
+            DESCRIPTION. Set to True if the systems response is to be returned. The default is False.
+        show : bool, optional
+            DESCRIPTION. Set to True if the systems response is to be displayed. The default is True.
+        Returns
+        -------
+        resp : numpy array
+            DESCRIPTION. numpy array of response of the system. Is only returned if ret is set to True
+
+        '''
+        try:
+            resp = self.reduced_tf.response(input_type, time_period, sample_time, ret, show)
+            if ret == True:
+                return resp
+            
+        except ValueError:
+            print("Improper transfer function. `num` is longer than `den`.")
+            
+    def tune(self, input_type="step", set_point=1, num_itr=1000, rate=0.01):
+        
+        costs = []
+        k = np.random.random(3).reshape(3,1)
+        
+        y_hat = self.response(input_type, ret=True, show=False)
+        m = len(y_hat)
+        
+        for s in range(1,m):
+            
+            y_hat = self.response(input_type, ret=True, show=False)
+            m = len(y_hat)
+            y = np.zeros(m) + set_point
+        
+            cost = (1/2)*((y_hat[s] - y[s])**2)
+            #cost = float((1/m)*np.sum(loss))
+            
+            
+            grad_kp = (y_hat[s] + y[s])/(s*(polyval(self.tf.num_coef, s)/polyval(self.tf.den_coef, s)))
+            grad_ki = (y_hat[s] + y[s])/(polyval(self.tf.num_coef, s)/polyval(self.tf.den_coef, s))
+            grad_kd = (y_hat[s] + y[s])/((s**2)*(polyval(self.tf.num_coef, s)/polyval(self.tf.den_coef, s)))
+            
+            grads = np.array([grad_kp, grad_ki, grad_kd])
+            
+            for i in range(m):
+                k = k - rate*grads
+                
+            if s%10 == 0:
+                print(f"cost {s}: {np.squeeze(cost)}")
+            if s%20 == 0:
+                costs.append(cost)
+                
+        plt.plot(costs)
+        plt.show()
+        return k, costs
