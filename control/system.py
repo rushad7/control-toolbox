@@ -397,38 +397,77 @@ class PID():
         except ValueError:
             print("Improper transfer function. `num` is longer than `den`.")
             
-    def tune(self, input_type="step", set_point=1, num_itr=1000, rate=0.01):
+    def tune(self, input_type="step", set_point=1, num_itr=70, rate=0.00000000001):
         
-        costs = []
         k = np.random.random(3).reshape(3,1)
         
-        y_hat = self.response(input_type, ret=True, show=False)
+        def red_tf():
+            pid_num = [k[2][0], k[0][0], k[1][0]]
+            pid_den = [1, 0]
+            
+            num = self.tf.num_coef
+            den = self.tf.den_coef
+            
+            tf_num = list(self.tf.num_coef.reshape(len(num),))
+            tf_den = list(self.tf.den_coef.reshape(len(den),))
+                    
+            num_diff = len(pid_num) - len(tf_num)
+            den_diff = len(pid_den) - len(tf_den)
+            
+            try:
+                if len(tf_num) < len(pid_num):
+                    temp_num = np.zeros(num_diff)
+                    tf_num = np.concatenate((temp_num, tf_num))
+                elif len(tf_num) > len(pid_num):
+                    temp_num = np.zeros(abs(num_diff))
+                    pid_num = np.concatenate((temp_num, pid_num))
+                                
+                if len(tf_den) < len(pid_den):
+                    temp_den = np.zeros(den_diff)
+                    tf_den = np.concatenate((temp_den, tf_den))
+                elif len(tf_den) > len(pid_den):
+                    temp_den = np.zeros(abs(den_diff))
+                    pid_den = np.concatenate((temp_den, pid_den))
+                
+            except ValueError:
+                pass
+        
+            reduced_tf_num = np.polymul(np.array(tf_num), np.array(pid_num))
+            reduced_tf_den = np.polymul(np.array(tf_den), np.array(pid_den))
+            reduced_tf = TransferFunction(reduced_tf_num, reduced_tf_den)
+            resp = reduced_tf.response(input_type, ret=True, show=False)
+            return resp
+        
+        costs = []
+        
+        y_hat = red_tf()
         m = len(y_hat)
         
-        for s in range(1,m):
-            
-            y_hat = self.response(input_type, ret=True, show=False)
-            m = len(y_hat)
-            y = np.zeros(m) + set_point
-        
-            cost = (1/2)*((y_hat[s] - y[s])**2)
-            #cost = float((1/m)*np.sum(loss))
-            
-            
-            grad_kp = (y_hat[s] + y[s])/(s*(polyval(self.tf.num_coef, s)/polyval(self.tf.den_coef, s)))
-            grad_ki = (y_hat[s] + y[s])/(polyval(self.tf.num_coef, s)/polyval(self.tf.den_coef, s))
-            grad_kd = (y_hat[s] + y[s])/((s**2)*(polyval(self.tf.num_coef, s)/polyval(self.tf.den_coef, s)))
-            
-            grads = np.array([grad_kp, grad_ki, grad_kd])
-            
-            for i in range(m):
-                k = k - rate*grads
+        for n in range(num_itr):
+            for s in range(1,m):
                 
-            if s%10 == 0:
-                print(f"cost {s}: {np.squeeze(cost)}")
-            if s%20 == 0:
+                y_hat = red_tf()
+                y = np.zeros(m) + set_point
+            
+                loss = (1/2)*((y_hat - y)**2)
+                cost = float((1/m)*np.sum(loss))
+                
+                
+                grad_kp = (y_hat + y)/(s*(polyval(self.tf.num_coef, s)/polyval(self.tf.den_coef, s)))
+                grad_ki = (y_hat + y)/(polyval(self.tf.num_coef, s)/polyval(self.tf.den_coef, s))
+                grad_kd = (y_hat + y)/((s**2)*(polyval(self.tf.num_coef, s)/polyval(self.tf.den_coef, s)))
+                
+                grads = np.array([grad_kp, grad_ki, grad_kd])
+                
+                for i in range(m):
+                    k = k - rate*grads
+                    
+            if n%10 == 0:
+                print(f"cost {n}: {np.squeeze(cost)}")
+            if n%20 == 0:
                 costs.append(cost)
                 
         plt.plot(costs)
         plt.show()
+        print(s)
         return k, costs
