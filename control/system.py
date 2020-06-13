@@ -263,8 +263,8 @@ class feedback(TransferFunction):
         ----------
         G : TransferFunction object
             DESCRIPTION. TF the feedback is to be implemented on
-        H : integer / float, optional
-            DESCRIPTION. Feedback block (gain of feedback). The default is 1 (unity feedback)
+        H : TransferFunction object / integer / float, optional
+            DESCRIPTION. Feedback block. The default is 1 (unity feedback)
         feedback_type : Negative or Positive feedback, optional
             DESCRIPTION. The default is "negative".
 
@@ -273,27 +273,56 @@ class feedback(TransferFunction):
         None.
 
         '''
+        if type(H) == TransferFunction:
+            
+            G_num = G.num_coef
+            G_num = G.num_coef.reshape(len(G_num))
+            
+            G_den = G.den_coef
+            G_den = G.den_coef.reshape(len(G_den))
+            
+            H_num = H.num_coef
+            H_num = H.num_coef.reshape(len(H_num))
+            
+            H_den = H.den_coef
+            H_den = H.den_coef.reshape(len(H_den))
+            
+            if feedback_type == "negative":
+                feedback_num = np.polymul(G_num, H_den)
+                feedback_den = np.polyadd(np.polymul(G_den, H_den), np.polymul(G_den, H_num))              
+            
+            elif feedback_type == "positive": 
+                feedback_num = np.polymul(G_num, H_den)
+                feedback_den = np.polysub(np.polymul(G_den, H_den), np.polymul(G_den, H_num))
+                
         
-        num = G.num_coef
-        den = G.den_coef
-        
-        if feedback_type == "negative":
-            feedback_den0 =  float(den[0])
-            feedback_den1 =  float(den[1])
-            feedback_den2 =  float(den[2] + (num[-1]/H))
-        elif feedback_type == "positive":
-            feedback_den0 =  float(den[0])
-            feedback_den1 =  float(den[1])
-            feedback_den2 =  float(den[2] - (num[-1]/H))
-        
-        feedback_num = num
-        feedback_den = np.array([feedback_den0, feedback_den1, feedback_den2])
-        
-        self.num_coef = feedback_num.reshape([len(feedback_num), 1])
-        self.den_coef = feedback_den.reshape([len(feedback_den), 1])
-        
+        elif type(H) == float or type(H) == int:
+            num = G.num_coef
+            den = G.den_coef
+            
+            if feedback_type == "negative":
+                feedback_den0 =  float(den[0])
+                feedback_den1 =  float(den[1])
+                feedback_den2 =  float(den[2] + (num[-1]/H))
+                
+            elif feedback_type == "positive":
+                feedback_den0 =  float(den[0])
+                feedback_den1 =  float(den[1])
+                feedback_den2 =  float(den[2] - (num[-1]/H))
+            
+            feedback_num = num
+            feedback_den = np.array([feedback_den0, feedback_den1, feedback_den2])
+            
+            feedback_num = feedback_num.reshape([len(feedback_num), 1])
+            feedback_den = feedback_den.reshape([len(feedback_den), 1])
+            
+            
+        self.num_coef = feedback_num
+        self.den_coef = feedback_den
+                
         self.feedback_tf = TransferFunction(self.num_coef, self.den_coef)
         self.order = self.feedback_tf.order
+        
         
 class PID():
     '''
@@ -398,7 +427,24 @@ class PID():
             print("Improper transfer function. `num` is longer than `den`.")
             
     def tune(self, input_type="step", set_point=1, num_itr=70, rate=0.00000000001):
-        
+        '''
+        Parameters
+        ----------
+        input_type : input signal type, optional
+            DESCRIPTION. The default is "step" input.
+        set_point : Optimal steady state value, optional
+            DESCRIPTION. The default is 1.
+        num_itr : number of iterations, optional
+            DESCRIPTION. The default is 70. Might have to adjust this to prevent the cost from increasing after decreasing.
+        rate : learning rate, optional
+            DESCRIPTION. The default is 0.00000000001. Suggested not to increase it.
+
+        Returns
+        -------
+        k : numpy array
+            DESCRIPTION. numpy array of Kp, Ki, Kd values
+
+        '''
         k = np.random.random(3).reshape(3,1)
         
         def red_tf():
@@ -470,4 +516,5 @@ class PID():
         plt.plot(costs)
         plt.show()
         print(s)
-        return k, costs
+        return k
+    
