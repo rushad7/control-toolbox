@@ -1,3 +1,2 @@
-from control.system import TransferFunction, feedback
+from control.system import TransferFunction, feedback, PID
 from control.rootlocus import rootlocus
-from control.PID import PID
