@@ -567,7 +567,9 @@ class reduce():
         return tfs
 
 class StateSpace():
-    
+    '''
+    State Space Representation
+    '''
     def __init__(self, A, B, C, D):
         self.A = A
         self.B = B
@@ -575,6 +577,9 @@ class StateSpace():
         self.D = D
         
     def display(self):
+        '''
+        Display SS model
+        '''
         print("X* = AX + Bu \n")
         print("Y = CX + Du \n")
         print("A = " + str(self.A) + "\n")
@@ -583,6 +588,13 @@ class StateSpace():
         print("D = " + str(self.D))
         
     def convertTF(self):
+        '''
+        Returns
+        -------
+        TYPE TransferFunction object
+            DESCRIPTION. Convert SS model to TF model
+
+        '''
         self.num_coef, self.den_coef = signal.ss2tf(self.A, self.B, self.C, self.D)
         if np.rank(self.num_coef) == 1:
             self.tf = TransferFunction(self.num_coef, self.den_coef)
