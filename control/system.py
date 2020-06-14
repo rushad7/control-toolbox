@@ -522,7 +522,6 @@ class reduce():
     def series(*tfs):
         
         tf_len = len(tfs)
-        print(tf_len)
         
         def series_mul(prev_tf, next_tf):    
             tf_num = np.polymul(prev_tf.num_coef.reshape(len(prev_tf.num_coef)), next_tf.num_coef.reshape(len(next_tf.num_coef)))
@@ -531,6 +530,23 @@ class reduce():
         
         for i in range(tf_len-1):
             num, den = series_mul(tfs[0], tfs[1])
+            tf = TransferFunction(num, den)
+            tfs = (tf,) + tfs[2:]
+        
+        tfs = tfs[0]
+        return tfs
+    
+    def parallel(*tfs):
+        
+        tf_len = len(tfs)
+        
+        def para_mul(prev_tf, next_tf):    
+            tf_num = np.add(np.polymul(prev_tf.num_coef.reshape(len(prev_tf.num_coef)), next_tf.den_coef.reshape(len(next_tf.den_coef))), np.polymul(prev_tf.den_coef.reshape(len(prev_tf.den_coef)), next_tf.num_coef.reshape(len(next_tf.num_coef))))
+            tf_den = np.polymul(prev_tf.den_coef.reshape(len(prev_tf.den_coef)), next_tf.den_coef.reshape(len(next_tf.den_coef)))
+            return tf_num, tf_den
+        
+        for i in range(tf_len-1):
+            num, den = para_mul(tfs[0], tfs[1])
             tf = TransferFunction(num, den)
             tfs = (tf,) + tfs[2:]
         
