@@ -581,3 +581,16 @@ class StateSpace():
         print("B = " + str(self.B) + "\n")
         print("C = " + str(self.C) + "\n")
         print("D = " + str(self.D))
+        
+    def convertTF(self):
+        self.num_coef, self.den_coef = signal.ss2tf(self.A, self.B, self.C, self.D)
+        if np.rank(self.num_coef) == 1:
+            self.tf = TransferFunction(self.num_coef, self.den_coef)
+            return self.tf
+            
+            
+        elif np.rank(self.num_coef) == 2:
+            tfs = []
+            for i in range(len(self.num_coef)):
+                tfs.append(TransferFunction(self.num_coef[i], self.den_coef))
+            return tfs
