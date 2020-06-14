@@ -518,9 +518,22 @@ class PID():
         return k
     
 class reduce():
-    
+    '''
+    Block Reduction
+    '''
     def series(*tfs):
-        
+        '''
+        Parameters
+        ----------
+        *tfs : TransferFunction objects
+            DESCRIPTION. TF objects which need to be reduced
+
+        Returns
+        -------
+        tfs : TransferFunction object
+            DESCRIPTION. Reduced TransferFunction object
+
+        '''
         tf_len = len(tfs)
         
         def series_mul(prev_tf, next_tf):    
