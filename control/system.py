@@ -565,3 +565,19 @@ class reduce():
         
         tfs = tfs[0]
         return tfs
+
+class StateSpace():
+    
+    def __init__(self, A, B, C, D):
+        self.A = A
+        self.B = B
+        self.C = C
+        self.D = D
+        
+    def display(self):
+        print("X* = AX + Bu \n")
+        print("Y = CX + Du \n")
+        print("A = " + str(self.A) + "\n")
+        print("B = " + str(self.B) + "\n")
+        print("C = " + str(self.C) + "\n")
+        print("D = " + str(self.D))
