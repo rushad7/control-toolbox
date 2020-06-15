@@ -606,3 +606,63 @@ class StateSpace():
             for i in range(len(self.num_coef)):
                 tfs.append(TransferFunction(self.num_coef[i], self.den_coef))
             return tfs
+        
+    def contr(self, ret=False):
+        '''
+        Parameters
+        ----------
+        ret : bool, optional
+            DESCRIPTION. Return determinant of Qc (Controlability matrix). The default is False.
+
+        Returns
+        -------
+        Qc : float
+            DESCRIPTION. Determinant of Controlability matrix (Qc)
+
+        '''
+        n = len(self.A)
+        Qc = self.B
+        AB = np.matmul(self.A, self.B)
+        Qc = np.hstack((Qc, AB))
+        
+        for i in range(n-2):
+            AB = np.matmul(self.A, AB)
+            Qc = np.hstack((Qc, AB))
+
+        if np.linalg.det(Qc) != 0 and n-1 == np.rank(self.A):
+            print("System is Controllable")
+        else:
+            print("System is not Controllable")
+        
+        if ret==True:
+            return Qc
+            
+    def obs(self, ret=False):
+        '''
+        Parameters
+        ----------
+        ret : bool, optional
+            DESCRIPTION. Return the determinant of the (Qc) Observability matrix. The default is False.
+
+        Returns
+        -------
+        Qc : float
+            DESCRIPTION. Determinant of the (Qc) Observability matrix.
+
+        '''
+        n = len(self.A.T)
+        Qc = self.C
+        AC = np.matmul(self.A.T, self.C)
+        Qc = np.hstack((Qc, AC))
+        
+        for i in range(n-2):
+            AC = np.matmul(self.A, AC)
+            Qc = np.hstack((Qc, AC))
+
+        if np.linalg.det(Qc) != 0 and n-1 == np.rank(self.A):
+            print("System is Observable")
+        else:
+            print("System is not Observable")
+            
+        if ret==True:
+            return Qc
