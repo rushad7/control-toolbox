@@ -6,7 +6,7 @@ with open('README.md', 'r') as fp:
 setup(
   name = 'control-toolbox',
   packages = ['control'],
-  version = '0.0.2', 
+  version = '0.0.7', 
   license='MIT',
   description = 'Python Control System Toolbox',
   long_description=long_description,
@@ -14,7 +14,7 @@ setup(
   author = 'Rushad Mehta',
   author_email = 'rushadmehta16@gmail.com',
   url = 'https://control-toolbox.readthedocs.io/',
-  download_url = 'https://github.com/rushad7/control-toolbox/archive/v0.0.1.tar.gz',
+  download_url = 'https://github.com/rushad7/control-toolbox/archive/v0.0.7.tar.gz',
   keywords = ['Control Systems', 'Python Control Toolbox', 'System Simulation'],
   install_requires=[
           'numpy',
