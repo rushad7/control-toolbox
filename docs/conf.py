@@ -13,7 +13,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../../'))
-
+sys.path.insert(0, r"C:\Users\Rushad\Desktop\control-toolbox\docs")
 
 # -- Project information -----------------------------------------------------
 
@@ -22,7 +22,7 @@ copyright = '2020, Rushad Mehta'
 author = 'Rushad Mehta'
 
 # The full version, including alpha/beta/rc tags
-release = 'v0.1'
+release = 'v0.0.7'
 
 
 # -- General configuration ---------------------------------------------------

@@ -9,7 +9,12 @@ Installation
 | The `control-toolbox` library can be installed using pip. 
 To install it use:
 ::
- pip install control-toolbox
+	pip install control-toolbox
+ 
+Development
+============
+| To get the latest unreleased version
+`git clone https://github.com/rushad7/control-toolbox.git`
 
 Getting Started
 ===============

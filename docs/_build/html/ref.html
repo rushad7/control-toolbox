@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Function Reference &#8212; Python Control Systems Toolbox v0.0.7 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="System Representation" href="rep.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="rep.html" title="System Representation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Python Control Systems Toolbox v0.0.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Function Reference</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="function-reference">
+<h1>Function Reference<a class="headerlink" href="#function-reference" title="Permalink to this headline">¶</a></h1>
+<p>The following table lists the classes and methods that can be used to model and simulate various systems and control strategies.</p>
+<div class="section" id="system-definition">
+<h2>System Definition<a class="headerlink" href="#system-definition" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Class</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>TransferFunction(num, den)</cite></p></td>
+<td><p>Creates a Transfer Function system object</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>StateSpace(A,B,C,D)</cite></p></td>
+<td><p>Creates a State Space system object</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="transfer-function-methods">
+<h2>Transfer Function methods<a class="headerlink" href="#transfer-function-methods" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>display()</cite></p></td>
+<td><p>Displays the Transfer Function system</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>parameters(settling_time_tolerance=0.02)</cite></p></td>
+<td><p>Returns the parameters of the system</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>response(input_type, time_period=10, sample_time=0.05, ret=False, show=True)</cite></p></td>
+<td><p>Returns the time domain response on the system</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>pzplot(ret=True)</cite></p></td>
+<td><p>Plots the Pole-Zero plot of the system and return poles and zeros</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>stability()</cite></p></td>
+<td><p>Returns the stability of the system</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>rootlocus(tf, gain_range=10.0)</cite></p></td>
+<td><p>Returns Root Locus of the system</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="state-space-methods">
+<h2>State Space methods<a class="headerlink" href="#state-space-methods" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>display()</cite></p></td>
+<td><p>Displays the State Space system</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>convertTF()</cite></p></td>
+<td><p>Converts State Space model to Transfer Function</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>contr()</cite></p></td>
+<td><p>Controllability of the system</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>obs()</cite></p></td>
+<td><p>Observability of the system</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="system-connections">
+<h2>System Connections<a class="headerlink" href="#system-connections" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>feedback( G, H=1.0, feedback_type=”negative”)</cite></p></td>
+<td><p>Feedback for the system</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>reduce.series(tf1, *tfn)</cite></p></td>
+<td><p>Return the series connection (tfn * …</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>reduce.parallel(tf1, *tfn)</cite></p></td>
+<td><p>Return the parallel connection (tfn + …</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="pid-control">
+<h2>PID Control<a class="headerlink" href="#pid-control" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>PID(Kp, Ki, Kd, tf)</cite></p></td>
+<td><p>Define PID system</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>response(input_type, time_period=10, sample_time=0.05, ret=False, show=True)</cite></p></td>
+<td><p>Return the response of the system after PID control</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>tune(input_type=”step”, set_point=1, num_itr=70, rate=0.00000000001)</cite></p></td>
+<td><p>Tune the PID coefficients</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>display()</cite></p></td>
+<td><p>Display the PID block</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>reduced_tf</cite></p></td>
+<td><p>Displays the reduced Transfer Function (Controller + Plant)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id1">
+<h2>System Connections<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>feedback( G, H=1.0, feedback_type=”negative”)</cite></p></td>
+<td><p>Feedback for the system</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>reduce.series(tf1, *tfn)</cite></p></td>
+<td><p>Return the series connection (tfn * …</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>reduce.parallel(tf1, *tfn)</cite></p></td>
+<td><p>Return the parallel connection (tfn + …</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="frequency-domain">
+<h2>Frequency Domain<a class="headerlink" href="#frequency-domain" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>bode.freqresp(tf)</cite></p></td>
+<td><p>Returns the Frequency Response of the system</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>bode.bode(tf)</cite></p></td>
+<td><p>Returns the Bode Plot of the system</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Function Reference</a><ul>
+<li><a class="reference internal" href="#system-definition">System Definition</a></li>
+<li><a class="reference internal" href="#transfer-function-methods">Transfer Function methods</a></li>
+<li><a class="reference internal" href="#state-space-methods">State Space methods</a></li>
+<li><a class="reference internal" href="#system-connections">System Connections</a></li>
+<li><a class="reference internal" href="#pid-control">PID Control</a></li>
+<li><a class="reference internal" href="#id1">System Connections</a></li>
+<li><a class="reference internal" href="#frequency-domain">Frequency Domain</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="rep.html"
+                        title="previous chapter">System Representation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/ref.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="rep.html" title="System Representation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Python Control Systems Toolbox v0.0.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Function Reference</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Rushad Mehta.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.0.
+    </div>
+  </body>
+</html>

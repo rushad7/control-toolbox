@@ -6,17 +6,21 @@ The `control-toolbox` is a Python Library for implementing and simulating variou
 
 .. rubric:: Current Supported Functionality:
 
-- System modeling with Transfer Functions (State Space models coming in future updates).
+- System modeling with Transfer Functions and State Space models.
 - Time Domain Response of System with the following input signals: Impulse, Step, Ramp.
-- Pole-Zero Plot of system.
-- Root Locus Plot of the system.
+- System conversion, State Space model to Transfer Function
+- Block diagram algebra: Series and Paralel.
 - Stability analysis of the system.
+- Root Locus Plot of the system.
+- Frequency Response, Bode plot.
+- Parameterization of systems.
+- Pole-Zero Plot of systems.
+- Feedback analysis.
+- PID control.
+- Observability, Controllability.
 
 .. rubric:: Future Updates:
 
-- Block diagram algebra.
-- Frequency response: Bode and Polar Plots.
-- Observability, Controllability.
 - Linear Quadratic Regulator.
 - Kalman Filter.
 
@@ -27,5 +31,6 @@ The `control-toolbox` is a Python Library for implementing and simulating variou
 
    intro
    rep
+   ref
 
 * :ref:`genindex`

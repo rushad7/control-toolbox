@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Python Control Systems Toolbox &#8212; Python Control Systems Toolbox v0.1 documentation</title>
+    <title>Python Control Systems Toolbox &#8212; Python Control Systems Toolbox v0.0.7 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -28,7 +28,7 @@
         <li class="right" >
           <a href="intro.html" title="Introduction"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">Python Control Systems Toolbox v0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">Python Control Systems Toolbox v0.0.7 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Python Control Systems Toolbox</a></li> 
       </ul>
     </div>  
@@ -43,17 +43,21 @@
 <p>The <cite>control-toolbox</cite> is a Python Library for implementing and simulating various systems and control strategies.</p>
 <p class="rubric">Current Supported Functionality:</p>
 <ul class="simple">
-<li><p>System modeling with Transfer Functions (State Space models coming in future updates).</p></li>
+<li><p>System modeling with Transfer Functions and State Space models.</p></li>
 <li><p>Time Domain Response of System with the following input signals: Impulse, Step, Ramp.</p></li>
-<li><p>Pole-Zero Plot of system.</p></li>
-<li><p>Root Locus Plot of the system.</p></li>
+<li><p>System conversion, State Space model to Transfer Function</p></li>
+<li><p>Block diagram algebra: Series and Paralel.</p></li>
 <li><p>Stability analysis of the system.</p></li>
+<li><p>Root Locus Plot of the system.</p></li>
+<li><p>Frequency Response, Bode plot.</p></li>
+<li><p>Parameterization of systems.</p></li>
+<li><p>Pole-Zero Plot of systems.</p></li>
+<li><p>Feedback analysis.</p></li>
+<li><p>PID control.</p></li>
+<li><p>Observability, Controllability.</p></li>
 </ul>
 <p class="rubric">Future Updates:</p>
 <ul class="simple">
-<li><p>Block diagram algebra.</p></li>
-<li><p>Frequency response: Bode and Polar Plots.</p></li>
-<li><p>Observability, Controllability.</p></li>
 <li><p>Linear Quadratic Regulator.</p></li>
 <li><p>Kalman Filter.</p></li>
 </ul>
@@ -62,11 +66,23 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="intro.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#development">Development</a></li>
 <li class="toctree-l2"><a class="reference internal" href="intro.html#getting-started">Getting Started</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rep.html">System Representation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="rep.html#transfer-functions">Transfer Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rep.html#state-space-models">State Space Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ref.html">Function Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ref.html#system-definition">System Definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ref.html#transfer-function-methods">Transfer Function methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ref.html#state-space-methods">State Space methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ref.html#system-connections">System Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ref.html#pid-control">PID Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ref.html#id1">System Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ref.html#frequency-domain">Frequency Domain</a></li>
 </ul>
 </li>
 </ul>
@@ -116,7 +132,7 @@
         <li class="right" >
           <a href="intro.html" title="Introduction"
              >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">Python Control Systems Toolbox v0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">Python Control Systems Toolbox v0.0.7 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Python Control Systems Toolbox</a></li> 
       </ul>
     </div>
