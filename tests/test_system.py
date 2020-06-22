@@ -6,7 +6,7 @@ Created on Sat Jun  6 19:03:05 2020
 """
 
 import numpy as np
-from control import system
+import system
 
 s = system.TransferFunction([9], [1,4,9])
 f = system.feedback(s, H=2)
