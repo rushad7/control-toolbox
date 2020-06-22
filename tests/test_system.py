@@ -6,7 +6,6 @@ Created on Sat Jun  6 19:03:05 2020
 """
 import os
 import sys
-sys.path.append("/control/")
 
 import numpy as np
 from control import system
