@@ -5,10 +5,7 @@ Created on Sun Jun 21 19:41:45 2020
 @author: Rushad
 """
 
-import re
-import sys
-#sys.path.append("/control-toolbox/control/")
-from .system import StateSpace
+from system import StateSpace
 import numpy as np
 from sympy import symbols, Matrix, eye, det, solveset, poly
 
@@ -83,6 +80,9 @@ class StateFeedback():
         B = self._ss.B
         C = self._ss.C
         D = self._ss.D
+        K = self.state_feedback_gain_matrix
         
-        model = system.StateSpace(A,B,C,D)
+        A_new = A - np.matmul(B.reshape((3,1)), K.reshape((1,3)))
+        
+        model = StateSpace(A_new,B,C,D)
         return model
