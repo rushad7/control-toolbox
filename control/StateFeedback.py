@@ -4,9 +4,7 @@ Created on Sun Jun 21 19:41:45 2020
 
 @author: Rushad
 """
-import os
-import sys
-sys.path.append(os.getcwd())
+
 from system import StateSpace
 import numpy as np
 from sympy import symbols, Matrix, eye, det, solveset, poly
