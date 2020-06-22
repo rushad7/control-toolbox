@@ -8,7 +8,7 @@ Created on Sun Jun 21 19:41:45 2020
 import re
 import sys
 #sys.path.append("/control-toolbox/control/")
-import .system
+from .system import StateSpace
 import numpy as np
 from sympy import symbols, Matrix, eye, det, solveset, poly
 
