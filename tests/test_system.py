@@ -4,6 +4,8 @@ Created on Sat Jun  6 19:03:05 2020
 
 @author: Rushad
 """
+import os
+import sys
 
 import numpy as np
 from control import system
