@@ -68,3 +68,9 @@ class StateFeedback():
         
         self.state_feedback_gain_matrix = np.array([k1, k2, k3])
         return self.state_feedback_gain_matrix
+    
+    def model(self):
+        """
+        Returns SS Model with State Feedback
+        
+        """
