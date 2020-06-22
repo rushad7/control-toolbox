@@ -1,4 +1,4 @@
-from control.system import TransferFunction, feedback, PID, reduce, StateSpace
-from control.rootlocus import rootlocus
-from control.bode import bode
-from control.StateFeedback import StateFeedback
+from .system import TransferFunction, feedback, PID, reduce, StateSpace
+from .rootlocus import rootlocus
+from .bode import bode
+from .StateFeedback import StateFeedback
