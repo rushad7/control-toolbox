@@ -9,7 +9,7 @@ import sys
 sys.path.append("/control/")
 
 import numpy as np
-import system
+from control import system
 
 s = system.TransferFunction([9], [1,4,9])
 f = system.feedback(s, H=2)
