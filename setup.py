@@ -19,6 +19,7 @@ setup(
   install_requires=[
           'numpy',
           'scipy',
+          'sympy',
           'matplotlib',
       ],
   classifiers=[
