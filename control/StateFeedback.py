@@ -6,7 +6,9 @@ Created on Sun Jun 21 19:41:45 2020
 """
 
 import re
-import control.system
+import sys
+sys.path.append("/control-toolbox/control/")
+import system
 import numpy as np
 from sympy import symbols, Matrix, eye, det, solveset, poly
 
@@ -29,7 +31,8 @@ class StateFeedback():
         None.
 
         '''
-        self.lambd = symbols('lambd')
+        self._ss = ss
+        self._lambd = symbols('lambd')
         k1, k2, k3 = symbols('k1, k2, k3')
         k_matrix = Matrix([k1, k2, k3]).transpose()
         
@@ -37,7 +40,7 @@ class StateFeedback():
         B_matrix = Matrix(ss.B)
         A_new = A_og - (B_matrix*k_matrix)
         
-        char_eq = eye(len(ss.A))*self.lambd - A_new
+        char_eq = eye(len(ss.A))*self._lambd - A_new
         determinant = det(char_eq)
         self.charactaristic_eq = determinant
         
@@ -55,10 +58,10 @@ class StateFeedback():
 
         '''
         
-        determinant = poly(self.charactaristic_eq, self.lambd)
+        determinant = poly(self.charactaristic_eq, self._lambd)
         determinant_coefs = determinant.all_coeffs()
         
-        char_eq_req = (self.lambd - roots[0])*(self.lambd - roots[1])*(self.lambd - roots[2])
+        char_eq_req = (self._lambd - roots[0])*(self._lambd - roots[1])*(self._lambd - roots[2])
         char_eq_req = char_eq_req.expand()
         char_eq_req = poly(char_eq_req)
         char_eq_req_coefs = char_eq_req.all_coeffs()
@@ -76,3 +79,10 @@ class StateFeedback():
         
         """
         
+        A = self._ss.A
+        B = self._ss.B
+        C = self._ss.C
+        D = self._ss.D
+        
+        model = system.StateSpace(A,B,C,D)
+        return model
