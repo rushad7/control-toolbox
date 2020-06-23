@@ -252,6 +252,19 @@ class TransferFunction():
                 state = "System is Unstable"
                     
         return state
+    
+    def convert2SS(self):
+        '''
+        Returns
+        -------
+        SpaceState object
+            DESCRIPTION. Converts TransferFunction object to StateSpace object 
+        '''
+        
+        A,B,C,D = signal.tf2ss(self.num_coef.reshape(-1), self.den_coef.reshape(-1))
+        self.state_space_rep = StateSpace(A,B,C,D)
+        
+        return self.state_space_rep
 
 class feedback(TransferFunction):
     '''
@@ -629,7 +642,7 @@ class StateSpace():
             AB = np.matmul(self.A, AB)
             Qc = np.hstack((Qc, AB))
 
-        if np.linalg.det(Qc) != 0 and n-1 == np.rank(self.A):
+        if np.linalg.det(Qc) != 0 and n == np.rank(self.A):
             print("System is Controllable")
         else:
             print("System is not Controllable")
@@ -651,15 +664,15 @@ class StateSpace():
 
         '''
         n = len(self.A.T)
-        Qc = self.C
-        AC = np.matmul(self.A.T, self.C)
+        Qc = self.C.T
+        AC = np.matmul(self.A, self.C.T)
         Qc = np.hstack((Qc, AC))
         
         for i in range(n-2):
             AC = np.matmul(self.A, AC)
             Qc = np.hstack((Qc, AC))
 
-        if np.linalg.det(Qc) != 0 and n-1 == np.rank(self.A):
+        if np.linalg.det(Qc) != 0 and n == np.rank(self.A):
             print("System is Observable")
         else:
             print("System is not Observable")
