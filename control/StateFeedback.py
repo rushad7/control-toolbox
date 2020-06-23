@@ -28,7 +28,12 @@ class StateFeedback():
         None.
 
         '''
+        
         self._ss = ss
+        q = self._ss.contr(ret=True)
+        if np.linalg.det(q) == 0: 
+            print("System is not Controllable. Input a controlable system")
+            
         self._lambd = symbols('lambd')
         k1, k2, k3 = symbols('k1, k2, k3')
         k_matrix = Matrix([k1, k2, k3]).transpose()
