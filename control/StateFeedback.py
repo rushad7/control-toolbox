@@ -31,12 +31,22 @@ class StateFeedback():
         
         self._ss = ss
         q = self._ss.contr(ret=True)
+        
         if np.linalg.det(q) == 0: 
-            print("System is not Controllable. Input a controlable system")
+            print("Input a controlable system")
+            
+        elif np.linalg.det(q) != 0: 
+            print("Hence Full State Feedback is possible")
             
         self._lambd = symbols('lambd')
-        k1, k2, k3 = symbols('k1, k2, k3')
-        k_matrix = Matrix([k1, k2, k3]).transpose()
+        
+        k_str = ""
+        for i in range(len(self._ss.A)):
+            k_str = k_str + "k" + str(i+1) + ","
+            
+        k_str = k_str[:-1]
+        k_var = symbols(k_str)
+        k_matrix = Matrix(k_var).transpose()
         
         A_og = Matrix(ss.A)
         B_matrix = Matrix(ss.B)
@@ -68,26 +78,37 @@ class StateFeedback():
         char_eq_req = poly(char_eq_req)
         char_eq_req_coefs = char_eq_req.all_coeffs()
         
-        k3 = float(list(solveset(determinant_coefs[1] - char_eq_req_coefs[1]).evalf())[0])
-        k2 = float(list(solveset(determinant_coefs[2] - char_eq_req_coefs[2]).evalf())[0])
-        k1 = float(list(solveset(determinant_coefs[3] - char_eq_req_coefs[3]).evalf())[0])
+        state_feedback_gain_list = []
+        for i in range(len(self._ss.A)):
+            k_elem = float(list(solveset(determinant_coefs[i+1] - char_eq_req_coefs[i+1]).evalf())[0])
+            state_feedback_gain_list.append(k_elem)
+         
+        state_feedback_gain_list = state_feedback_gain_list[::-1]
+        self.state_feedback_gain_matrix = np.array(state_feedback_gain_list).reshape(1, len(self._ss.A))
         
-        self.state_feedback_gain_matrix = np.array([k1, k2, k3])
         return self.state_feedback_gain_matrix
     
-    def model(self):
-        """
-        Returns SS Model with State Feedback
-        
-        """
-        
+    def model(self, k_ref=1):
+        '''
+        Parameters
+        ----------
+        k_ref : float/integer, optional
+            DESCRIPTION. Reference gain. Increase/Decrease this to adjust the steady state error. The default is 1.
+
+        Returns
+        -------
+        model : StateSpace object
+            DESCRIPTION. Returns SS Model with State Feedback
+
+        '''
         A = self._ss.A
         B = self._ss.B
         C = self._ss.C
         D = self._ss.D
         K = self.state_feedback_gain_matrix
         
-        A_new = A - np.matmul(B.reshape((3,1)), K.reshape((1,3)))
+        A_new = A - np.matmul(B.reshape((len(self._ss.A),1)), K.reshape((1,len(self._ss.A))))
+        B_new = B*k_ref
+        model = StateSpace(A_new,B_new,C,D)
         
-        model = StateSpace(A_new,B,C,D)
         return model
