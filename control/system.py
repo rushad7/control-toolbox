@@ -600,7 +600,7 @@ class StateSpace():
         print("C = " + str(self.C) + "\n")
         print("D = " + str(self.D))
         
-    def convertTF(self):
+    def convert2TF(self):
         '''
         Returns
         -------
