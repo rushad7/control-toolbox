@@ -608,7 +608,12 @@ class StateSpace():
             DESCRIPTION. Convert SS model to TF model
 
         '''
-        #self.B = self.B.rehape()
+        
+        self.A = np.array(self.A)
+        self.B = np.array(self.B)
+        self.C = np.array(self.C)
+        self.D = np.array(self.D)
+        
         self.num_coef, self.den_coef = signal.ss2tf(self.A, self.B, self.C, self.D)
         if np.rank(self.num_coef) == 1:
             self.tf = TransferFunction(self.num_coef, self.den_coef)
