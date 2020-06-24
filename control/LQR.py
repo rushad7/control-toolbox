@@ -11,14 +11,36 @@ from .system import StateSpace
 class LQR():
     
     def __init__(self, ss, Q, R, N):
+        '''
+        Parameters
+        ----------
+        ss : StateSpce object
+            DESCRIPTION. StateSpace object on which LQR is to be done.
+        Q : numpy array
+            DESCRIPTION. Q matrix of cost function
+        R : numpy 
+            DESCRIPTION. R matrix of cost function
+        N : TYPE
+            DESCRIPTION.
 
+        Returns
+        -------
+        None.
+
+        '''
         self._ss = ss
         self._Q = Q
         self._R = R
         self._N = N
 
     def solve(self):
-        
+        '''
+        Returns
+        -------
+        k : numpy array
+            DESCRIPTION. numpy array of Feedback gain matix
+            
+        '''
         A = self._ss.A
         B = self._ss.B
         
@@ -36,11 +58,19 @@ class LQR():
         for t in range(self._N):
             Kt = -np.linalg.inv(self._R + B.T@P[t+1]@B)@B.T@P[t+1]@A
             K[t] = Kt
-         
-        return K[self._N-1]   
+        
+        k = K[self._N-1]
+            
+        return k   
     
     def model(self):
-        
+        '''
+        Returns
+        -------
+        ss_model : TYPE
+            DESCRIPTION. StateSpace object of system with StateFeedback
+
+        '''
         k = self.solve()
        
         A_new = self._ss.A - self._ss.B@k
