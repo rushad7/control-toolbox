@@ -608,6 +608,7 @@ class StateSpace():
             DESCRIPTION. Convert SS model to TF model
 
         '''
+        #self.B = self.B.rehape()
         self.num_coef, self.den_coef = signal.ss2tf(self.A, self.B, self.C, self.D)
         if np.rank(self.num_coef) == 1:
             self.tf = TransferFunction(self.num_coef, self.den_coef)
@@ -663,16 +664,16 @@ class StateSpace():
             DESCRIPTION. Determinant of the (Qc) Observability matrix.
 
         '''
-        n = len(self.A.T)
-        Qc = self.C.T
-        AC = np.matmul(self.A, self.C.T)
+        n = len(np.array(self.A).T)
+        Qc = np.array(self.C).T
+        AC = np.matmul(np.array(self.A).T, np.array(self.C).T)
         Qc = np.hstack((Qc, AC))
         
         for i in range(n-2):
-            AC = np.matmul(self.A, AC)
+            AC = np.matmul(np.array(self.A).T, AC)
             Qc = np.hstack((Qc, AC))
 
-        if np.linalg.det(Qc) != 0 and n == np.rank(self.A):
+        if np.linalg.det(Qc) != 0 and n == np.rank(np.array(self.A).T):
             print("System is Observable")
         else:
             print("System is not Observable")
