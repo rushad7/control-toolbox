@@ -56,7 +56,7 @@ class StateFeedback():
         determinant = det(char_eq)
         self.charactaristic_eq = determinant
         
-    def gain(self, roots):
+    def solve(self, roots):
         '''
         Parameters
         ----------
