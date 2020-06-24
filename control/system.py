@@ -665,7 +665,7 @@ class StateSpace():
             AB = np.matmul(self.A, AB)
             Qc = np.hstack((Qc, AB))
 
-        if np.linalg.det(Qc) != 0 and n == np.rank(self.A):
+        if np.linalg.det(Qc) != 0:
             print("System is Controllable")
         else:
             print("System is not Controllable")
@@ -695,7 +695,7 @@ class StateSpace():
             AC = np.matmul(np.array(self.A).T, AC)
             Qc = np.hstack((Qc, AC))
 
-        if np.linalg.det(Qc) != 0 and n == np.rank(np.array(self.A).T):
+        if np.linalg.det(Qc) != 0:
             print("System is Observable")
         else:
             print("System is not Observable")
