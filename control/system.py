@@ -584,10 +584,10 @@ class StateSpace():
     State Space Representation
     '''
     def __init__(self, A, B, C, D):
-        self.A = A
-        self.B = B
-        self.C = C
-        self.D = D
+        self.A = np.array(A)
+        self.B = np.array(B)
+        self.C = np.array(C)
+        self.D = np.array(D)
         
     def display(self):
         '''
