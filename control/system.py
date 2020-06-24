@@ -584,6 +584,23 @@ class StateSpace():
     State Space Representation
     '''
     def __init__(self, A, B, C, D):
+        '''
+        Parameters
+        ----------
+        A : numpy matrix
+            DESCRIPTION. A matix of State Space system
+        B : numpy matrix
+            DESCRIPTION. B matix of State Space system
+        C : numpy matrix
+            DESCRIPTION. C matix of State Space system
+        D : numpy matrix
+            DESCRIPTION. D matix of State Space system
+
+        Returns
+        -------
+        None.
+
+        '''
         self.A = np.array(A)
         self.B = np.array(B)
         self.C = np.array(C)
@@ -685,3 +702,57 @@ class StateSpace():
             
         if ret==True:
             return Qc
+        
+    def stability(self):
+        '''
+        Returns
+        -------
+        state : String
+            DESCRIPTION. Stability of the system 
+
+        '''
+        eig_val,_ = np.linalg.eig(self.A)
+        
+        if len(eig_val >= 1):
+            poles = np.roots(eig_val.reshape(-1))     
+            poles_round = np.array(poles.imag, dtype="int")
+            
+            if (poles.real < 0).all():
+                state = "System is Stable"
+                            
+            elif np.count_nonzero(poles_round) != len(poles_round) and (poles.real <= 0).all():
+                if np.sum(poles) == np.sum(np.unique(poles)):
+                    state = "System is Marginally Stable"
+                else:
+                    state = "System in Unstable"
+            else:
+                state = "System is Unstable"
+                    
+        return state
+    
+    def eigplot(self, ret=True):
+        '''
+        Parameters
+        ----------
+        ret : bool, optional
+            DESCRIPTION. Return eigenvalues/poles of the system. The default is True.
+
+        Returns
+        -------
+        eig_val : numpy array
+            DESCRIPTION. Eigen Values/poles of system
+
+        '''
+        eig_val,_ = np.linalg.eig(self.A)
+        
+        if len(eig_val) >= 1:
+            plt.plot(eig_val.real, eig_val.imag, "x", label="Poles")
+        
+        plt.xlabel('Re')
+        plt.ylabel('Im')
+        plt.grid(True, which="both")
+        plt.legend()
+        plt.show()
+        
+        if ret == True:
+            return eig_val
