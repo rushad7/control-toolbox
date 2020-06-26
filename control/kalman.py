@@ -44,21 +44,28 @@ class KalmanFilter():
         self.P = np.dot(np.dot(I - np.dot(K, self._C), self.P), (I - np.dot(K, self._C)).T) + np.dot(np.dot(K, self.R), K.T)
         
         y = np.dot(self._C,self.x)
-        return y
+        if y.shape == (1,1):
+            y = float(y)
+        return self.x,y,K
 
-    def solve(self, measurements):
+    def solve(self, measurements, ret_k=False, ret_x=False):
         
         time = np.array(range(len(measurements)))
-        state_predictions = []
-        output_predictions = []
+        predictions = []
+        K = []
+        X = []
         
         for z in measurements:
-            state_predictions.append(np.dot(self._C,  self.predict())[0])
-            output_predictions.append(self.update(z)[0][0])
+            x,y,k = self.update(z)
+            predictions.append(y)
+            K.append(k)
+            X.append(x)
         
-        plt.plot(time, np.array(output_predictions), label = 'Kalman Filter Prediction')
-        plt.plot(time, measurements, label = 'Measurements')
-        plt.legend()
-        plt.show()
-        
-        return output_predictions
+        if ret_k == False and ret_x == False:
+            return predictions
+        elif ret_k == False and ret_x == True:
+            return predictions, X
+        elif ret_k == True and ret_x == False:
+            return predictions, K
+        elif ret_k == True and ret_x == True:
+            return predictions, K, X
