@@ -4,3 +4,4 @@ from .bode import bode
 from .StateFeedback import StateFeedback
 from .LQR import LQR
 from .StateObserver import StateObserver
+from .kalman import KalmanFilter
