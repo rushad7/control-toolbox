@@ -20,8 +20,8 @@ class LQR():
             DESCRIPTION. Q matrix of cost function
         R : numpy 
             DESCRIPTION. R matrix of cost function
-        N : TYPE
-            DESCRIPTION.
+        N : integer
+            DESCRIPTION. Time horizon.
 
         Returns
         -------
