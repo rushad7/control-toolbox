@@ -6,7 +6,7 @@ with open('README.md', 'r') as fp:
 setup(
   name = 'control-toolbox',
   packages = ['control'],
-  version = '0.0.7', 
+  version = '0.0.8', 
   license='MIT',
   description = 'Python Control System Toolbox',
   long_description=long_description,
@@ -25,7 +25,6 @@ setup(
   classifiers=[
     'Development Status :: 3 - Alpha',
     'Intended Audience :: Science/Research',
-    'Topic :: Software Development',
     'Topic :: Scientific/Engineering',
     'License :: OSI Approved :: MIT License',
     'Programming Language :: Python :: 3.6',
