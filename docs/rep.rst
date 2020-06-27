@@ -2,12 +2,12 @@
 System Representation
 ======================
 
-Currently, systems can be defined by Transfer Functions. Support for State Space models will be added in a future update.
+Systems can be defined by Transfer Functions and State Space models. Both system representations provide near identical utility.
 
 Transfer Functions
 ===================
 
-A Transfer Functions is the Laplace Transform of the ratio of output to input, and are mathematically described as:
+A Transfer Function is the Laplace Transform of the ratio of output to input, and are mathematically described as:
 
 .. figure:: /shared_images/tf.png
    :align: center
@@ -35,4 +35,4 @@ To define a system as Space State model, use the `StateSpace` class.
 
 Here, A,B,C,D are ndarrays.
 
-.. note:: Although you can define the system in any form, currently most functionality is suited for the Transfer Function form. Therefore, you need to convert the State Space model to the Transfer Function model first using the `StateSpace.convertTF()` method. Direct support for State Space modelswill be added in a future update.
+.. note:: Although you can define a system in any of the above form, few features are suited only for a particular representation. Therefore, if a particular method is needed and is not provided for the given system, you need to convert the system model first using the `convert2TF()` or `convert2SS()` method. Direct support for these methods will be added in a future update.

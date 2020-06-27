@@ -17,6 +17,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Function Reference" href="ref.html" />
     <link rel="prev" title="Introduction" href="intro.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -25,6 +26,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ref.html" title="Function Reference"
+             accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="intro.html" title="Introduction"
              accesskey="P">previous</a> |</li>
@@ -40,10 +44,10 @@
             
   <div class="section" id="system-representation">
 <h1>System Representation<a class="headerlink" href="#system-representation" title="Permalink to this headline">¶</a></h1>
-<p>Currently, systems can be defined by Transfer Functions. Support for State Space models will be added in a future update.</p>
+<p>Systems can be defined by Transfer Functions and State Space models. Both system representations provide near identical utility.</p>
 <div class="section" id="transfer-functions">
 <h2>Transfer Functions<a class="headerlink" href="#transfer-functions" title="Permalink to this headline">¶</a></h2>
-<p>A Transfer Functions is the Laplace Transform of the ratio of output to input, and are mathematically described as:</p>
+<p>A Transfer Function is the Laplace Transform of the ratio of output to input, and are mathematically described as:</p>
 <div class="figure align-center">
 <img alt="_images/tf.png" src="_images/tf.png" />
 </div>
@@ -68,7 +72,7 @@
 <p>Here, A,B,C,D are ndarrays.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Although you can define the system in any form, currently most functionality is suited for the Transfer Function form. Therefore, you need to convert the State Space model to the Transfer Function model first using the <cite>StateSpace.convertTF()</cite> method. Direct support for State Space modelswill be added in a future update.</p>
+<p>Although you can define a system in any of the above form, few features are suited only for a particular representation. Therefore, if a particular method is needed and is not provided for the given system, you need to convert the system model first using the <cite>convert2TF()</cite> or <cite>convert2SS()</cite> method. Direct support for these methods will be added in a future update.</p>
 </div>
 </div>
 </div>
@@ -92,6 +96,9 @@
   <h4>Previous topic</h4>
   <p class="topless"><a href="intro.html"
                         title="previous chapter">Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ref.html"
+                        title="next chapter">Function Reference</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -119,6 +126,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="ref.html" title="Function Reference"
+             >next</a> |</li>
         <li class="right" >
           <a href="intro.html" title="Introduction"
              >previous</a> |</li>

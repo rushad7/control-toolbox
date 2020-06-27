@@ -64,7 +64,7 @@
 </table>
 </div>
 <div class="section" id="transfer-function-methods">
-<h2>Transfer Function methods<a class="headerlink" href="#transfer-function-methods" title="Permalink to this headline">¶</a></h2>
+<h2>Transfer Function Methods<a class="headerlink" href="#transfer-function-methods" title="Permalink to this headline">¶</a></h2>
 <table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 50%" />
@@ -98,7 +98,7 @@
 </table>
 </div>
 <div class="section" id="state-space-methods">
-<h2>State Space methods<a class="headerlink" href="#state-space-methods" title="Permalink to this headline">¶</a></h2>
+<h2>State Space Methods<a class="headerlink" href="#state-space-methods" title="Permalink to this headline">¶</a></h2>
 <table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 50%" />
@@ -113,7 +113,7 @@
 <tr class="row-even"><td><p><cite>display()</cite></p></td>
 <td><p>Displays the State Space system</p></td>
 </tr>
-<tr class="row-odd"><td><p><cite>convertTF()</cite></p></td>
+<tr class="row-odd"><td><p><cite>convert2TF()</cite></p></td>
 <td><p>Converts State Space model to Transfer Function</p></td>
 </tr>
 <tr class="row-even"><td><p><cite>contr()</cite></p></td>
@@ -121,6 +121,12 @@
 </tr>
 <tr class="row-odd"><td><p><cite>obs()</cite></p></td>
 <td><p>Observability of the system</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>stability()</cite></p></td>
+<td><p>Stability of the system</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>eigplot(self, ret=True)</cite></p></td>
+<td><p>Plots eigenvalues/poles of system</p></td>
 </tr>
 </tbody>
 </table>
@@ -139,7 +145,7 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><p><cite>feedback( G, H=1.0, feedback_type=”negative”)</cite></p></td>
-<td><p>Feedback for the system</p></td>
+<td><p>Creates a Feedback Object</p></td>
 </tr>
 <tr class="row-odd"><td><p><cite>reduce.series(tf1, *tfn)</cite></p></td>
 <td><p>Return the series connection (tfn * …</p></td>
@@ -150,64 +156,8 @@
 </tbody>
 </table>
 </div>
-<div class="section" id="pid-control">
-<h2>PID Control<a class="headerlink" href="#pid-control" title="Permalink to this headline">¶</a></h2>
-<table class="colwidths-given docutils align-default">
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Method</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><cite>PID(Kp, Ki, Kd, tf)</cite></p></td>
-<td><p>Define PID system</p></td>
-</tr>
-<tr class="row-odd"><td><p><cite>response(input_type, time_period=10, sample_time=0.05, ret=False, show=True)</cite></p></td>
-<td><p>Return the response of the system after PID control</p></td>
-</tr>
-<tr class="row-even"><td><p><cite>tune(input_type=”step”, set_point=1, num_itr=70, rate=0.00000000001)</cite></p></td>
-<td><p>Tune the PID coefficients</p></td>
-</tr>
-<tr class="row-odd"><td><p><cite>display()</cite></p></td>
-<td><p>Display the PID block</p></td>
-</tr>
-<tr class="row-even"><td><p><cite>reduced_tf</cite></p></td>
-<td><p>Displays the reduced Transfer Function (Controller + Plant)</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="id1">
-<h2>System Connections<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<table class="colwidths-given docutils align-default">
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Method</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><cite>feedback( G, H=1.0, feedback_type=”negative”)</cite></p></td>
-<td><p>Feedback for the system</p></td>
-</tr>
-<tr class="row-odd"><td><p><cite>reduce.series(tf1, *tfn)</cite></p></td>
-<td><p>Return the series connection (tfn * …</p></td>
-</tr>
-<tr class="row-even"><td><p><cite>reduce.parallel(tf1, *tfn)</cite></p></td>
-<td><p>Return the parallel connection (tfn + …</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="frequency-domain">
-<h2>Frequency Domain<a class="headerlink" href="#frequency-domain" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="frequency-domain-analysis">
+<h2>Frequency Domain Analysis<a class="headerlink" href="#frequency-domain-analysis" title="Permalink to this headline">¶</a></h2>
 <table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 50%" />
@@ -228,6 +178,140 @@
 </tbody>
 </table>
 </div>
+<div class="section" id="pid-control-design">
+<h2>PID Control Design<a class="headerlink" href="#pid-control-design" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>PID(Kp, Ki, Kd, tf)</cite></p></td>
+<td><p>Creates a PID object</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>response(input_type, time_period=10, sample_time=0.05, ret=False, show=True)</cite></p></td>
+<td><p>Return the response of the system after PID control</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>tune(input_type=”step”, set_point=1, num_itr=70, rate=0.00000000001)</cite></p></td>
+<td><p>Tune the PID coefficients</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>display()</cite></p></td>
+<td><p>Display the PID block</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>reduced_tf</cite></p></td>
+<td><p>Displays the reduced Transfer Function (Controller + Plant)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="state-feedback-design">
+<h2>State Feedback Design<a class="headerlink" href="#state-feedback-design" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>StateFeedback(ss)</cite></p></td>
+<td><p>Creates a StateFeedback object</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>solve(roots)</cite></p></td>
+<td><p>Calculates the State Feedback gain matrix</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>model(k_ref=1)</cite></p></td>
+<td><p>Retruns StateSpace object after applying State Feedback</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="state-observer-design">
+<h2>State Observer Design<a class="headerlink" href="#state-observer-design" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>StateObserver(ss)</cite></p></td>
+<td><p>Creates StateObserver object</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>solve(roots)</cite></p></td>
+<td><p>Calculates the State Observer gain matrix</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>model(k_ref=1)</cite></p></td>
+<td><p>Retruns the StateSpace object after applying State Observervation</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="linear-quadratic-regulator-lqr">
+<h2>Linear Quadratic Regulator(LQR)<a class="headerlink" href="#linear-quadratic-regulator-lqr" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>LQR(ss, Q, R, N)</cite></p></td>
+<td><p>Creates an LQR object</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>solve()</cite></p></td>
+<td><p>Calculates the optimal gain matrix</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>model()</cite></p></td>
+<td><p>Returns the StateSpace object after applying State Observation</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="kalman-filter-linear-quadratic-estimator-lqe">
+<h2>Kalman Filter / Linear Quadratic Estimator(LQE)<a class="headerlink" href="#kalman-filter-linear-quadratic-estimator-lqe" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>KalmanFilter(ss, Q, R, P=None, x0=None)</cite></p></td>
+<td><p>Creates a KalmanFilter object</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>predict(u = 0):</cite></p></td>
+<td><p>Predict next state</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>update(z):</cite></p></td>
+<td><p>Update Predictions</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>solve(measurements, ret_k=False, ret_x=False):</cite></p></td>
+<td><p>Returns the Predictions, Kalman Gain, and States of the system</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -241,12 +325,15 @@
   <ul>
 <li><a class="reference internal" href="#">Function Reference</a><ul>
 <li><a class="reference internal" href="#system-definition">System Definition</a></li>
-<li><a class="reference internal" href="#transfer-function-methods">Transfer Function methods</a></li>
-<li><a class="reference internal" href="#state-space-methods">State Space methods</a></li>
+<li><a class="reference internal" href="#transfer-function-methods">Transfer Function Methods</a></li>
+<li><a class="reference internal" href="#state-space-methods">State Space Methods</a></li>
 <li><a class="reference internal" href="#system-connections">System Connections</a></li>
-<li><a class="reference internal" href="#pid-control">PID Control</a></li>
-<li><a class="reference internal" href="#id1">System Connections</a></li>
-<li><a class="reference internal" href="#frequency-domain">Frequency Domain</a></li>
+<li><a class="reference internal" href="#frequency-domain-analysis">Frequency Domain Analysis</a></li>
+<li><a class="reference internal" href="#pid-control-design">PID Control Design</a></li>
+<li><a class="reference internal" href="#state-feedback-design">State Feedback Design</a></li>
+<li><a class="reference internal" href="#state-observer-design">State Observer Design</a></li>
+<li><a class="reference internal" href="#linear-quadratic-regulator-lqr">Linear Quadratic Regulator(LQR)</a></li>
+<li><a class="reference internal" href="#kalman-filter-linear-quadratic-estimator-lqe">Kalman Filter / Linear Quadratic Estimator(LQE)</a></li>
 </ul>
 </li>
 </ul>

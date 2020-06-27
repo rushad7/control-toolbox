@@ -18,6 +18,6 @@ Development
 
 Getting Started
 ===============
-To start using the packages, we can simply import it as follows:
+To start using the package, we simply import it as:
 ::
  >>> import control
