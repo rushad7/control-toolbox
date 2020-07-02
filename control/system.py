@@ -756,3 +756,39 @@ class StateSpace():
         
         if ret == True:
             return eig_val
+        
+    def response(self, t, initial_cond=None, u=None):
+        
+        if initial_cond.any() == None:
+            initial_cond = initial_cond.zeros(shape=(len(self.A)))
+        else:
+            initial_cond = initial_cond.reshape((len(self.A)))
+            
+        if u.any() == None:
+            u = u.zeros(shape=(len(self.A)))
+        else:
+            u = u.reshape((len(self.A)))
+        
+        B = self.B.reshape(len(self.B))
+        resp = []
+        conv = signal.convolve2d(np.array(np.dot(B,u)).reshape(1,1), np.exp(self.A), mode='same')
+        
+        for i in range(t+1):
+            resp_elem = np.dot(initial_cond, np.exp(self.A*i)) + conv
+            resp.append(resp_elem)
+            
+        resp_dict = {}
+        temp_list = []
+        
+        for m in range(resp[0][0].shape[0]):
+            var = "x" + str(m+1)
+            for n in range(len(resp)):
+                temp_val = resp[n][0][m]
+                temp_list.append(temp_val)
+            resp_dict[var] = temp_list
+            
+        
+        #plt.plot(range(t+1), resp)
+        #plt.show()
+        
+        return resp_dict
