@@ -5,3 +5,4 @@ from .StateFeedback import StateFeedback
 from .LQR import LQR
 from .StateObserver import StateObserver
 from .kalman import KalmanFilter
+__version__ = '0.0.8'
