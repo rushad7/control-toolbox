@@ -757,7 +757,7 @@ class StateSpace():
         if ret == True:
             return eig_val
         
-    def response(self, t, initial_cond=None, u=None):
+    def response(self, t, initial_cond, u):
         '''
         Parameters
         ----------
@@ -775,15 +775,8 @@ class StateSpace():
 
         '''
         
-        if initial_cond.any() == None:
-            initial_cond = initial_cond.zeros(shape=(len(self.A)))
-        else:
-            initial_cond = initial_cond.reshape((len(self.A)))
-            
-        if u.any() == None:
-            u = u.zeros(shape=(len(self.A)))
-        else:
-            u = u.reshape((len(self.A)))
+        initial_cond = initial_cond.reshape((len(self.A)))
+        u = u.reshape((len(self.A)))
         
         B = self.B.reshape(len(self.B))
         resp = []
