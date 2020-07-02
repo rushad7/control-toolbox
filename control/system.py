@@ -758,6 +758,22 @@ class StateSpace():
             return eig_val
         
     def response(self, t, initial_cond=None, u=None):
+        '''
+        Parameters
+        ----------
+        t : int
+            DESCRIPTION. time period
+        initial_cond : numpy array, optional
+            DESCRIPTION. numpy array of initial conditions x(0). The default is None.
+        u : numpy array, optional
+            DESCRIPTION. numpy array of inputs. The default is None.
+
+        Returns
+        -------
+        resp_dict : dictionary
+            DESCRIPTION. Dictionary of states till time t.
+
+        '''
         
         if initial_cond.any() == None:
             initial_cond = initial_cond.zeros(shape=(len(self.A)))
@@ -787,8 +803,11 @@ class StateSpace():
                 temp_list.append(temp_val)
             resp_dict[var] = temp_list[:]
             temp_list.clear()
-            
-        #plt.plot(range(t+1), resp)
-        #plt.show()
+         
+        for i in range(len(resp_dict)):
+            selector = 'x' + str(i+1)
+            plt.plot(resp_dict[selector], label=selector)
+            plt.legend()
+        plt.show()
         
         return resp_dict
