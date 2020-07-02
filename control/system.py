@@ -785,9 +785,9 @@ class StateSpace():
             for n in range(len(resp)):
                 temp_val = resp[n][0][m]
                 temp_list.append(temp_val)
-            resp_dict[var] = temp_list
+            resp_dict[var] = temp_list[:]
+            temp_list.clear()
             
-        
         #plt.plot(range(t+1), resp)
         #plt.show()
         
