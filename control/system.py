@@ -757,15 +757,15 @@ class StateSpace():
         if ret == True:
             return eig_val
         
-    def response(self, t, initial_cond, u):
+    def response(self, t, initial_cond, u, ret=False, show=True):
         '''
         Parameters
         ----------
-        t : int
+        t : integer
             DESCRIPTION. time period
-        initial_cond : numpy array, optional
+        initial_cond : numpy array
             DESCRIPTION. numpy array of initial conditions x(0). The default is None.
-        u : numpy array, optional
+        u : numpy array
             DESCRIPTION. numpy array of inputs. The default is None.
 
         Returns
@@ -796,11 +796,14 @@ class StateSpace():
                 temp_list.append(temp_val)
             resp_dict[var] = temp_list[:]
             temp_list.clear()
-         
-        for i in range(len(resp_dict)):
-            selector = 'x' + str(i+1)
-            plt.plot(resp_dict[selector], label=selector)
-            plt.legend()
-        plt.show()
         
-        return resp_dict
+            
+        if show == True:
+            for i in range(len(resp_dict)):
+                selector = 'x' + str(i+1)
+                plt.plot(resp_dict[selector], label=selector)
+                plt.legend()
+            plt.show()
+        
+        if ret == True:
+            return resp_dict
