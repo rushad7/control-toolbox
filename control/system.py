@@ -626,22 +626,17 @@ class StateSpace():
 
         '''
         
-        self.A = np.array(self.A)
-        self.B = np.array(self.B)
-        self.C = np.array(self.C)
-        self.D = np.array(self.D)
-        
-        self.num_coef, self.den_coef = signal.ss2tf(self.A, self.B, self.C, self.D)
-        if np.rank(self.num_coef) == 1:
-            self.tf = TransferFunction(self.num_coef, self.den_coef)
+        num_coef, den_coef = signal.ss2tf(self.A, self.B, self.C, self.D)
+        if np.rank(num_coef) == 1:
+            self.tf = TransferFunction(num_coef, den_coef)
             return self.tf
             
             
-        elif np.rank(self.num_coef) == 2:
-            tfs = []
-            for i in range(len(self.num_coef)):
-                tfs.append(TransferFunction(self.num_coef[i], self.den_coef))
-            return tfs
+        elif np.rank(num_coef) == 2:
+            self.tfs = []
+            for i in range(len(num_coef)):
+                self.tfs.append(TransferFunction(num_coef[i], den_coef))
+            return self.tfs
         
     def contr(self, ret=False):
         '''
