@@ -757,16 +757,16 @@ class StateSpace():
         if ret == True:
             return eig_val
         
-    def response(self, t, initial_cond, u, ret=False, show=True):
+    def StateResponse(self, t, initial_cond, u, ret=False, show=True):
         '''
         Parameters
         ----------
         t : integer
             DESCRIPTION. time period
         initial_cond : numpy array
-            DESCRIPTION. numpy array of initial conditions x(0). The default is None.
+            DESCRIPTION. numpy array of initial conditions x(0).
         u : numpy array
-            DESCRIPTION. numpy array of inputs. The default is None.
+            DESCRIPTION. numpy array of inputs.
 
         Returns
         -------
@@ -801,6 +801,61 @@ class StateSpace():
         if show == True:
             for i in range(len(resp_dict)):
                 selector = 'x' + str(i+1)
+                plt.plot(resp_dict[selector], label=selector)
+                plt.legend()
+            plt.show()
+        
+        if ret == True:
+            return resp_dict
+        
+    def OutputResponse(self, t, initial_cond, u, ret=False, show=True):
+        '''
+        Parameters
+        ----------
+        t : integer
+            DESCRIPTION. time period
+        initial_cond : numpy array
+            DESCRIPTION. numpy array of initial conditions x(0).
+        u : numpy array
+            DESCRIPTION. numpy array of inputs.
+        ret : bool, optional
+            DESCRIPTION. Returns the response dictioanry if True. The default is False.
+        show : bool, optional
+            DESCRIPTION. Returns the response plot if True. The default is True.
+
+        Returns
+        -------
+        resp_dict : dict
+            DESCRIPTION. Response dictionary. 
+
+        '''
+        B = self.B
+        C = self.C
+        D = self.D        
+        initial_cond = initial_cond.reshape((len(self.A)))       
+
+        resp = []
+        conv = np.dot(C.T, signal.convolve2d(np.array(np.dot(B.T,u)).reshape(1,1), np.exp(self.A), mode='same')).T + np.dot(D,u.T)
+        
+        for i in range(t+1):
+            resp_elem = np.dot(C, np.dot(initial_cond, np.exp(self.A*i))) + conv
+            resp.append(resp_elem)
+            
+        resp_dict = {}
+        temp_list = []
+        
+        for m in range(resp[0][0].shape[0]):
+            var = "y" + str(m+1)
+            for n in range(len(resp)):
+                temp_val = resp[n][0][m]
+                temp_list.append(temp_val)
+            resp_dict[var] = temp_list[:]
+            temp_list.clear()
+        
+            
+        if show == True:
+            for i in range(len(resp_dict)):
+                selector = 'y' + str(i+1)
                 plt.plot(resp_dict[selector], label=selector)
                 plt.legend()
             plt.show()
