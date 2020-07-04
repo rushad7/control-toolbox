@@ -403,11 +403,11 @@ class PID():
         Displays the PID TF block
 
         '''
-        self.num_str = str(self.K_d) + "*S^2 + " + str(self.K_p) + "*S + " + str(self.K_i) 
-        self.den_str = round(len(self.num_str)/2)*" " + "S" + " "*round(len(self.num_str)/2)
-        self.div_line_len = max(len(self.num_str), len(self.den_str))
-        self.div_line = self.div_line_len*"-"
-        pid_tf_disp = str(self.num_str + " \n" + self.div_line + " \n" + self.den_str)
+        num_str = str(self.K_d) + "*S^2 + " + str(self.K_p) + "*S + " + str(self.K_i) 
+        den_str = round(len(num_str)/2)*" " + "S" + " "*round(len(num_str)/2)
+        div_line_len = max(len(num_str), len(den_str))
+        div_line = div_line_len*"-"
+        pid_tf_disp = str(num_str + " \n" + div_line + " \n" + den_str)
         print(pid_tf_disp)
         
     def response(self, input_type, time_period=10, sample_time=0.05, ret=False, show=True):
