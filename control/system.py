@@ -393,7 +393,7 @@ class PID():
             
         except ValueError:
             pass
-        
+
         reduced_tf_num = np.polymul(np.array(tf_num), np.array(pid_num))
         reduced_tf_den = np.polymul(np.array(tf_den), np.array(pid_den))
         self.reduced_tf = TransferFunction(reduced_tf_num, reduced_tf_den)
@@ -438,7 +438,7 @@ class PID():
         except ValueError:
             print("Improper transfer function. `num` is longer than `den`.")
             
-    def tune(self, input_type="step", set_point=1, num_itr=70, rate=0.00000000001):
+    def tune(self, input_type="step", set_point=1, num_itr=70, rate=0.00000000001, lambd=0.7):
         '''
         Parameters
         ----------
@@ -449,7 +449,9 @@ class PID():
         num_itr : number of iterations, optional
             DESCRIPTION. The default is 70. Might have to adjust this to prevent the cost from increasing after decreasing.
         rate : learning rate, optional
-            DESCRIPTION. The default is 0.00000000001. Suggested not to increase it.
+            DESCRIPTION. The default is 0.00000000001.
+        lambd : regularization coefficient, optional
+            DESCRIPTION. The default is 0.7
 
         Returns
         -------
@@ -457,6 +459,7 @@ class PID():
             DESCRIPTION. numpy array of Kp, Ki, Kd values
 
         '''
+        np.random.seed(1)
         k = np.random.random(3).reshape(3,1)
         
         def red_tf():
@@ -508,12 +511,11 @@ class PID():
                 y = np.zeros(m) + set_point
             
                 loss = (1/2)*((y_hat - y)**2)
-                cost = float((1/m)*np.sum(loss))
+                cost = abs(-float((1/m)*np.sum(loss)) + (lambd/(2*m))*np.sum(k**2))
                 
-                
-                grad_kp = (y_hat + y)/(s*(polyval(self.tf.num_coef, s)/polyval(self.tf.den_coef, s)))
-                grad_ki = (y_hat + y)/(polyval(self.tf.num_coef, s)/polyval(self.tf.den_coef, s))
-                grad_kd = (y_hat + y)/((s**2)*(polyval(self.tf.num_coef, s)/polyval(self.tf.den_coef, s)))
+                grad_kp = (y_hat + y)/(s*(polyval(self.tf.num_coef, s)/polyval(self.tf.den_coef, s))) + (lambd/(2*m))*2*k[0]
+                grad_ki = (y_hat + y)/(polyval(self.tf.num_coef, s)/polyval(self.tf.den_coef, s)) + (lambd/(2*m))*2*k[1]
+                grad_kd = (y_hat + y)/((s**2)*(polyval(self.tf.num_coef, s)/polyval(self.tf.den_coef, s))) + (lambd/(2*m))*2*k[2]
                 
                 grads = np.array([grad_kp, grad_ki, grad_kd])
                 
@@ -524,10 +526,15 @@ class PID():
                 print(f"cost {n}: {np.squeeze(cost)}")
             if n%20 == 0:
                 costs.append(cost)
+
+        k = k[:,-1]
+        self.K_p = k[0]
+        self.K_i = k[1]
+        self.K_d = k[2]
                 
         plt.plot(costs)
         plt.show()
-        print(s)
+
         return k
     
 class reduce():
