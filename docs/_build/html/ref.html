@@ -125,8 +125,14 @@
 <tr class="row-even"><td><p><cite>stability()</cite></p></td>
 <td><p>Stability of the system</p></td>
 </tr>
-<tr class="row-odd"><td><p><cite>eigplot(self, ret=True)</cite></p></td>
+<tr class="row-odd"><td><p><cite>eigplot(ret=True)</cite></p></td>
 <td><p>Plots eigenvalues/poles of system</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>StateResponse(t, initial_cond, u, ret=False, show=True)</cite></p></td>
+<td><p>Returns and plots state response</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>OutputResponse(t, initial_cond, u, ret=False, show=True)</cite></p></td>
+<td><p>Returns and plots output response</p></td>
 </tr>
 </tbody>
 </table>
@@ -178,8 +184,8 @@
 </tbody>
 </table>
 </div>
-<div class="section" id="pid-control-design">
-<h2>PID Control Design<a class="headerlink" href="#pid-control-design" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="pid-controller-design">
+<h2>PID Controller Design<a class="headerlink" href="#pid-controller-design" title="Permalink to this headline">¶</a></h2>
 <table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 50%" />
@@ -197,7 +203,7 @@
 <tr class="row-odd"><td><p><cite>response(input_type, time_period=10, sample_time=0.05, ret=False, show=True)</cite></p></td>
 <td><p>Return the response of the system after PID control</p></td>
 </tr>
-<tr class="row-even"><td><p><cite>tune(input_type=”step”, set_point=1, num_itr=70, rate=0.00000000001)</cite></p></td>
+<tr class="row-even"><td><p><cite>tune(input_type=”step”, set_point=1, num_itr=70, rate=0.00000000001, lambd=0.7)</cite></p></td>
 <td><p>Tune the PID coefficients</p></td>
 </tr>
 <tr class="row-odd"><td><p><cite>display()</cite></p></td>
@@ -329,7 +335,7 @@
 <li><a class="reference internal" href="#state-space-methods">State Space Methods</a></li>
 <li><a class="reference internal" href="#system-connections">System Connections</a></li>
 <li><a class="reference internal" href="#frequency-domain-analysis">Frequency Domain Analysis</a></li>
-<li><a class="reference internal" href="#pid-control-design">PID Control Design</a></li>
+<li><a class="reference internal" href="#pid-controller-design">PID Controller Design</a></li>
 <li><a class="reference internal" href="#state-feedback-design">State Feedback Design</a></li>
 <li><a class="reference internal" href="#state-observer-design">State Observer Design</a></li>
 <li><a class="reference internal" href="#linear-quadratic-regulator-lqr">Linear Quadratic Regulator(LQR)</a></li>

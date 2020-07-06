@@ -37,7 +37,9 @@ State Space Methods
    "`contr()`", "Controllability of the system"
    "`obs()`", "Observability of the system"
    "`stability()`", "Stability of the system"
-   "`eigplot(self, ret=True)`", "Plots eigenvalues/poles of system"
+   "`eigplot(ret=True)`", "Plots eigenvalues/poles of system"
+   "`StateResponse(t, initial_cond, u, ret=False, show=True)`", "Returns and plots state response"
+   "`OutputResponse(t, initial_cond, u, ret=False, show=True)`", "Returns and plots output response"
 
 System Connections
 *******************
@@ -59,15 +61,15 @@ Frequency Domain Analysis
    "`bode.freqresp(tf)`", "Returns the Frequency Response of the system"
    "`bode.bode(tf)`", "Returns the Bode Plot of the system"
 
-PID Control Design
-******************
+PID Controller Design
+**********************
 .. csv-table:: 
    :header: "Method", "Description"
    :widths: 40, 40
 
    "`PID(Kp, Ki, Kd, tf)`", "Creates a PID object"
    "`response(input_type, time_period=10, sample_time=0.05, ret=False, show=True)`", "Return the response of the system after PID control"
-   "`tune(input_type=""step"", set_point=1, num_itr=70, rate=0.00000000001)`", "Tune the PID coefficients"
+   "`tune(input_type=""step"", set_point=1, num_itr=70, rate=0.00000000001, lambd=0.7)`", "Tune the PID coefficients"
    "`display()`", "Display the PID block"
    "`reduced_tf`", "Displays the reduced Transfer Function (Controller + Plant)"
 

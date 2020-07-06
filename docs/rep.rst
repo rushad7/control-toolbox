@@ -35,4 +35,4 @@ To define a system as Space State model, use the `StateSpace` class.
 
 Here, A,B,C,D are ndarrays.
 
-.. note:: Although you can define a system in any of the above form, few features are suited only for a particular representation. Therefore, if a particular method is needed and is not provided for the given system, you need to convert the system model first using the `convert2TF()` or `convert2SS()` method. Direct support for these methods will be added in a future update.
+.. note:: A system can be defined by any of the two representations above. If a particular method is needed but is not provided for the given system representation (which is unlikely), you can convert the system model to the desired representation using the `convert2TF()` or `convert2SS()` method. 
