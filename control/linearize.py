@@ -7,7 +7,6 @@ Created on Wed Jul 29 17:10:26 2020
 
 import numpy as np
 from sympy import symbols, Matrix, exp
-from .system import StateSpace
 
 class linearize():
     
@@ -53,8 +52,8 @@ class linearize():
         C_lin = self._gt.jacobian(self._x_matrix)
         D_lin = self._gt.jacobian(self._u_matrix)
         
-        coefs_matrix = [A_lin, B_lin, C_lin, D_lin]
-        vars_matrix = [del_xt, del_yt, del_ut]
+        coefs_matrix = [np.array(A_lin), np.array(B_lin), np.array(C_lin), np.array(D_lin)]
+        vars_matrix = [np.array(del_xt), np.array(del_yt), np.array(del_ut)]
         
         return coefs_matrix, vars_matrix
         
