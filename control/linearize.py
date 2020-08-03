@@ -42,7 +42,7 @@ class linearize():
         self._ft = Matrix(ss.A)*(self._x_matrix).T + Matrix(ss.B)*(self._u_matrix)
         self._gt = Matrix(ss.C)*(self._x_matrix).T + Matrix(ss.D)*(self._u_matrix)
         
-    def lin(self):
+    def linearize(self):
         
         del_xt = self._xt - self._x_op
         del_yt = self._yt - self._y_op
@@ -53,9 +53,10 @@ class linearize():
         C_lin = self._gt.jacobian(self._x_matrix)
         D_lin = self._gt.jacobian(self._u_matrix)
         
-        linearized_model = StateSpace(A_lin, B_lin, C_lin, D_lin)
+        coefs_matrix = [A_lin, B_lin, C_lin, D_lin]
+        vars_matrix = [del_xt, del_yt, del_ut]
         
-        return linearized_model
+        return coefs_matrix, vars_matrix
         
         
         
