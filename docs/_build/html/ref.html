@@ -318,6 +318,53 @@
 </tbody>
 </table>
 </div>
+<div class="section" id="linearization">
+<h2>Linearization<a class="headerlink" href="#linearization" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>linearize(ss, x0, x_op, u_op, y_op)</cite></p></td>
+<td><p>Creates a <cite>linearize</cite> object</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>linearize()</cite></p></td>
+<td><p>Linearizes the system and returns the systems state space matrices</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="systemidentification">
+<h2>SystemIdentification<a class="headerlink" href="#systemidentification" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>SystemIdentification(path_x, path_x_dot, path_y)</cite></p></td>
+<td><p>Creates a <cite>SystemIdentification</cite> object</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>fit(num_epochs=500):</cite></p></td>
+<td><p>Models the system</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>model():</cite></p></td>
+<td><p>Returns the dictioinary of system matrices</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -340,6 +387,8 @@
 <li><a class="reference internal" href="#state-observer-design">State Observer Design</a></li>
 <li><a class="reference internal" href="#linear-quadratic-regulator-lqr">Linear Quadratic Regulator(LQR)</a></li>
 <li><a class="reference internal" href="#kalman-filter-linear-quadratic-estimator-lqe">Kalman Filter / Linear Quadratic Estimator(LQE)</a></li>
+<li><a class="reference internal" href="#linearization">Linearization</a></li>
+<li><a class="reference internal" href="#systemidentification">SystemIdentification</a></li>
 </ul>
 </li>
 </ul>

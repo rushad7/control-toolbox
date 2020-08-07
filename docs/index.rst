@@ -23,6 +23,8 @@ The `control-toolbox` is a Python Library for implementing and simulating variou
 - Full State Observer
 - Linear Quadratic Regulator(LQR)
 - Linear Quadratic Estimator(LQE) / Kalman Filter
+- Linearization.
+- System Identification.
 
 .. rubric:: Future Updates:
 

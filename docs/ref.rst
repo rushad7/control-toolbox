@@ -113,3 +113,22 @@ Kalman Filter / Linear Quadratic Estimator(LQE)
   "`predict(u = 0):`", "Predict next state"
   "`update(z):`", "Update Predictions"
   "`solve(measurements, ret_k=False, ret_x=False):`", "Returns the Predictions, Kalman Gain, and States of the system"
+
+Linearization
+**************
+.. csv-table:: 
+  :header: "Method", "Description"
+  :widths: 40, 40
+  
+  "`linearize(ss, x0, x_op, u_op, y_op)`", "Creates a `linearize` object"
+  "`linearize()`", "Linearizes the system and returns the systems state space matrices"
+  
+SystemIdentification
+*********************
+.. csv-table:: 
+  :header: "Method", "Description"
+  :widths: 40, 40
+  
+  "`SystemIdentification(path_x, path_x_dot, path_y)`", "Creates a `SystemIdentification` object"
+  "`fit(num_epochs=500):`", "Models the system"
+  "`model():`", "Returns the dictioinary of system matrices"
