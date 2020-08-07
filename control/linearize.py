@@ -65,9 +65,9 @@ class linearize():
         '''
         Returns
         -------
-        coefs_matrix : list
+        coefs_matrix : dict
             DESCRIPTION. List of matrices A, B, C, D for the linearized system.
-        vars_matrix : list
+        vars_matrix : dict
             DESCRIPTION. List of matrices xt, yt, ut for the linearized system.
 
         '''
@@ -80,8 +80,8 @@ class linearize():
         C_lin = self._gt.jacobian(self._x_matrix)
         D_lin = self._gt.jacobian(self._u_matrix)
         
-        coefs_matrix = [np.array(A_lin), np.array(B_lin), np.array(C_lin), np.array(D_lin)]
-        vars_matrix = [np.array(del_xt), np.array(del_yt), np.array(del_ut)]
+        coefs_matrix = {"A":np.array(A_lin), "B":np.array(B_lin), "C":np.array(C_lin), "D":np.array(D_lin)}
+        vars_matrix = {"del_xt":np.array(del_xt), "del_yt":np.array(del_yt), "del_ut":np.array(del_ut)}
         
         return coefs_matrix, vars_matrix
         
