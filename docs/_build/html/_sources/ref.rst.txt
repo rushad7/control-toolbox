@@ -123,8 +123,8 @@ Linearization
   "`linearize(ss, x0, x_op, u_op, y_op)`", "Creates a `linearize` object"
   "`linearize()`", "Linearizes the system and returns the systems state space matrices"
   
-SystemIdentification
-*********************
+System Identification
+***********************
 .. csv-table:: 
   :header: "Method", "Description"
   :widths: 40, 40
