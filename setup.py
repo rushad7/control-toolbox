@@ -14,7 +14,7 @@ setup(
   author = 'Rushad Mehta',
   author_email = 'rushadmehta16@gmail.com',
   url = 'https://control-toolbox.readthedocs.io/',
-  download_url = 'https://github.com/rushad7/control-toolbox/archive/v0.0.9.tar.gz',
+  download_url = 'https://github.com/rushad7/control-toolbox/archive/v0.1.0.tar.gz',
   keywords = ['Control Systems', 'Python Control Toolbox', 'System Simulation'],
   install_requires=[
           'numpy',
