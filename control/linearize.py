@@ -9,9 +9,29 @@ import numpy as np
 from sympy import symbols, Matrix, exp
 
 class linearize():
-    
+    """
+    Linearizes systems.
+    """
     def __init__(self, ss, x0, x_op, u_op, y_op):
-        
+        '''
+        Parameters
+        ----------
+        ss : StateSpace object
+            DESCRIPTION. StateSpace of the system to be linearized.
+        x0 : numpy array
+            DESCRIPTION. ndarray of initial conditions
+        x_op : numpy array
+            DESCRIPTION. ndarray of operating points system is to be linearized about
+        u_op : numpy array
+            DESCRIPTION. ndarray of operating points system is to be linearized about
+        y_op : numpy array
+            DESCRIPTION. ndarray of operating points system is to be linearized about
+
+        Returns
+        -------
+        None.
+
+        '''
         self._x_op = x_op
         self._y_op = y_op
         self._u_op = u_op
@@ -42,7 +62,15 @@ class linearize():
         self._gt = Matrix(ss.C)*(self._x_matrix).T + Matrix(ss.D)*(self._u_matrix)
         
     def linearize(self):
-        
+        '''
+        Returns
+        -------
+        coefs_matrix : list
+            DESCRIPTION. List of matrices A, B, C, D for the linearized system.
+        vars_matrix : list
+            DESCRIPTION. List of matrices xt, yt, ut for the linearized system.
+
+        '''
         del_xt = self._xt - self._x_op
         del_yt = self._yt - self._y_op
         del_ut = self._u_matrix - self._u_op
