@@ -21,6 +21,7 @@ setup(
           'scipy',
           'sympy',
           'matplotlib',
+          'tensorflow==1.14.0
       ],
   classifiers=[
     'Development Status :: 3 - Alpha',
