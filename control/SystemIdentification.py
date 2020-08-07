@@ -7,8 +7,9 @@ Created on Sun Aug  2 16:01:30 2020
 
 import numpy as np
 import pandas as pd
-from tensorflow.keras.models import Sequential
+from sympy import symbols, Matrix
 from tensorflow.keras.layers import Dense
+from tensorflow.keras.models import Sequential
 
 class SystemIdentification():
     
@@ -34,27 +35,44 @@ class SystemIdentification():
         
     def model(self):
         
+        def exp(x):
+        
+            expo = Matrix.zeros(x.shape[0], x.shape[1])    
+            for i in range(x.shape[0]):
+                for j in range(x.shape[1]):
+                    expo[i+j] = np.e**(expo[i+j])
+        
+            return expo
+        
         def sigmoid(z):
-            a = 1 / (1 + np.exp(-z))
-            return a
-        
-        num_layers = len(self._model.layers)
-        num_neurons = [12, 8, 1]
-        activation_dict = {}
-        prev_op = self._x
-        
-        for l in range(num_layers):
             
+            exp_z = exp(-z)
+            for i in range(exp_z.shape[0]*exp_z.shape[1]):
+                exp_z[i] = exp_z[i] + 1
+            
+            for i in range(exp_z.shape[0]*exp_z.shape[1]):
+                exp_z[i] = 1/exp_z[i]
+            
+            return exp_z
+        
+        x_str = ""
+        for i in range(len(self._x[0])-1):
+            x_str = x_str + "x" + str(i+1) + ","
+            
+        x_str = x_str + "u"
+        x_var = symbols(x_str)
+        self.x_matrix = Matrix([x_var]).transpose()
+        x_matrix = Matrix([x_var]).transpose()
+        
+        for l in range(len(self._model.layers)):
             try:
-                z = self._model.layers[l].get_weights()[0].T@prev_op.T
+                z = Matrix(Matrix(self._model.layers[0].get_weights()[0]).transpose().dot(x_matrix)) + Matrix(self._model.layers[0].get_weights()[1])
                 a = sigmoid(z)
-                activation_dict["a"+str(l+1)] = a
-                prev_op = a
+                x_matrix = a
             
             except ValueError:
-                z = self._model.layers[l].get_weights()[0].T@prev_op
+                z = Matrix(Matrix(self._model.layers[0].get_weights()[0]).transpose().dot(x_matrix)) + Matrix(self._model.layers[0].get_weights()[1]).T
                 a = sigmoid(z)
-                activation_dict["a"+str(l+1)] = a
-                prev_op = a
-                
-        return activation_dict
+                x_matrix = a                
+            
+        return a
