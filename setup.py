@@ -22,7 +22,7 @@ setup(
           'sympy',
           'matplotlib',
           'pandas',
-          'tensorflow==1.14.0'
+          'tensorflow==2.3.1'
       ],
   classifiers=[
     'Development Status :: 3 - Alpha',
