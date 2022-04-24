@@ -9,7 +9,7 @@ Transfer Functions
 
 A Transfer Function is the Laplace Transform of the ratio of output to input, and are mathematically described as:
 
-.. figure:: /shared_images/tf.png
+.. figure:: /shared_images/tf.PNG
    :align: center
 
 To define a system in terms of a Transfer Function, use the `TransferFunction` class.
@@ -31,7 +31,7 @@ Space State models are mathamatically described as:
 To define a system as Space State model, use the `StateSpace` class.
 ::
 	>>> import control
-	>>> s = control.StateSpce(A,B,C,D)
+	>>> s = control.StateSpace(A,B,C,D)
 
 Here, A,B,C,D are ndarrays.
 
